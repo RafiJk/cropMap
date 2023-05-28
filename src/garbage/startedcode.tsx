@@ -1,14 +1,25 @@
 import Image from 'next/image'
 import { Inter } from 'next/font/google'
+import axios from 'axios'
+import React from 'react';
+import { MapContainer, TileLayer } from 'react-leaflet';
 
 const inter = Inter({ subsets: ['latin'] })
 
+
 export default function Home() {
+  const clickMe = async () => {
+    window.alert("Hey I'm a pop up button")
+    const res = await axios.get('/api/hello')
+    console.warn(res.data)
+  }
+
   return (
     <main
       className={`flex min-h-screen flex-col items-center justify-between p-24 ${inter.className}`}
     >
-      <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
+      <button onClick={clickMe}>Click Me</button>
+      {/* <div className="z-10 w-full max-w-5xl items-center justify-between font-mono text-sm lg:flex">
         <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
           Get started by changing&nbsp;
           <code className="font-mono font-bold">src/pages/index.tsx</code>
@@ -31,7 +42,7 @@ export default function Home() {
             />
           </a>
         </div>
-      </div>
+      </div> */}
 
       <div className="relative flex place-items-center before:absolute before:h-[300px] before:w-[480px] before:-translate-x-1/2 before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl before:content-[''] after:absolute after:-z-20 after:h-[180px] after:w-[240px] after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10 after:dark:from-sky-900 after:dark:via-[#0141ff]/40 before:lg:h-[360px]">
         <Image
@@ -116,3 +127,69 @@ export default function Home() {
     </main>
   )
 }
+
+
+
+// class Website extends React.Component {
+//   render() {
+//     return (
+//       <div>
+//         <header>
+//           <h1>Welcome to My Website</h1>
+//           <nav>
+//             <ul>
+//               <li>Home</li>
+//               <li>About</li>
+//               <li>Contact</li>
+//             </ul>
+//           </nav>
+//         </header>
+//         <main>
+//           <section>
+//             <h2>About Me</h2>
+//             <p>
+//               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla id
+//               ex enim. Sed consectetur eu urna non vulputate.
+//             </p>
+//           </section>
+//           <section>
+//             <h2>My Projects</h2>
+//             <ul>
+//               <li>Project 1</li>
+//               <li>Project 2</li>
+//               <li>Project 3</li>
+//             </ul>
+//           </section>
+//         </main>
+//         <footer>
+//           <p>&copy; 2023 My Website. All rights reserved.</p>
+//         </footer>
+//       </div>
+//     );
+//   }
+// }
+
+// export default Website;
+
+
+// const MapScreen = () => {
+//   const delmarvaLatitude = 38.7949;
+//   const delmarvaLongitude = -75.3660;
+//   const zoomLevel = 8;
+
+//   return (
+//     <MapContainer
+//       center={[delmarvaLatitude, delmarvaLongitude]}
+//       zoom={zoomLevel}
+//       style={{ height: '500px', width: '100%' }}
+//     >
+//       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+//     </MapContainer>
+//   );
+// };
+
+// export default MapScreen;
+
+
+
+
