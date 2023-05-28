@@ -4,7 +4,7 @@ import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { scaleQuantize } from "d3-scale";
 import { csv } from "d3-fetch";
 
-const geoUrl = "https://cdn.jsdelivr.net/npm/us-atlas@3/counties-10m.json";
+const geoUrl = "/TheGreatStateofMaryland.Json";
 
 
 const colorScale = scaleQuantize()
@@ -21,12 +21,12 @@ const colorScale = scaleQuantize()
     "#782618"
   ]);
 
+
 const MapChart = () => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    // https://www.bls.gov/lau/
-    csv("/unemployment-by-county-2017.csv").then(counties => {
+    csv("/harvest.csv").then(counties => {
       setData(counties);
     });
   }, []);
@@ -37,12 +37,12 @@ const MapChart = () => {
         <Geographies geography={geoUrl}>
           {({ geographies }) =>
             geographies.map(geo => {
-              const cur = data.find(s => s.id === geo.id);
+              const cur = data.find(s => s.name === geo.properties.NAME);
               return (
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill={colorScale(cur ? cur.unemployment_rate : "#EEE")}
+                  fill={colorScale(cur ? cur.harvest_percent : "#EEE")}
                 />
               );
             })
@@ -54,3 +54,4 @@ const MapChart = () => {
 };
 
 export default MapChart;
+

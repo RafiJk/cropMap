@@ -9,9 +9,9 @@ interface Suggestion {
 }
 
 const suggestions: Suggestion[] = [
-  { id: 1, value: 'PESTA' },
-  { id: 2, value: 'PESTB' },
-  { id: 3, value: 'PESTC' },
+  { id: 1, value: 'Soybean' },
+  { id: 2, value: 'Corn' },
+  { id: 3, value: 'Wheat' },
 ];
 
 const HomePage = () => {
@@ -35,7 +35,7 @@ const HomePage = () => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && suggestionsList.length > 0) {
       setSelectedSuggestion(suggestionsList[0]);
-      router.push(`/pest/${suggestionsList[0].value}`);
+      router.push(`/crop/${suggestionsList[0].value}`);
     }
   };
 
@@ -68,11 +68,11 @@ const HomePage = () => {
     { suggestion }: Autosuggest.SuggestionSelectedEventData<Suggestion>
   ) => {
     setSelectedSuggestion(suggestion);
-    router.push(`/pest/${suggestion.value}`);
+    router.push(`/crop/${suggestion.value}`);
   };
 
   const inputProps: Autosuggest.InputProps<Suggestion> = {
-    placeholder: 'Search PESTA, PESTB, or PESTC',
+    placeholder: 'Search Wheat, Soybean, or Corn',
     value: searchTerm,
     onChange: handleSearch as (event: ChangeEvent<HTMLInputElement>) => void,
     onKeyDown: handleKeyDown,
