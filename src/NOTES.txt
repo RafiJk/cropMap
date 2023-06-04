@@ -3,3 +3,5 @@ B"SD
 1. GOAL FOR TOMOROW...MAKE MY BLOTCHES...DO IT OFF SAMPLE DATA...
 2. https://github.com/deldersveld/topojson/tree/master/countries/united-states
 Maryland map comes from there
+
+am i going ot need a way to change to read from api not csv

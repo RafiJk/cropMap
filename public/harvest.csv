@@ -1,25 +1,26 @@
 id,name,year,harvest_percent
-24001,"Allegany",2017,5.9
-24003,"Anne Arundel",2017,2.6
-24005,"Baltimore",2017,4.4
-24009,"Calvert",2017,3.7
-24011,"Caroline",2017,4.4
-24013,"Carroll",2017,3.5
-24015,"Cecil",2017,4.9
-24017,"Charles",2017,4.1
-24019,"Dorchester",2017,5.9
-24021,"Frederick",2017,3.7
-24023,"Garrett",2017,5.3
-24025,"Harford",2017,4.0
-24027,"Howard",2017,3.2
-24029,"Kent",2017,4.6
-24031,"Montgomery",2017,3.4
-24033,"Prince George's",2017,4.3
-24035,"Queen Anne's",2017,3.8
-24037,"St. Mary's",2017,4.1
-24039,"Somerset",2017,7.0
-24041,"Talbot",2017,4.1
-24043,"Washington",2017,4.8
-24045,"Wicomico",2017,5.9
-24047,"Worcester",2017,4.8
-24510,"Baltimore",2017,6.3
+24001,Allegany,2017,5.9
+24003,Anne Arundel,2017,2.6
+24005,Baltimore,2018,5
+24009,Calvert,2017,3.7
+24011,Caroline,2017,4.4
+24013,Carroll,2017,3.5
+24015,Cecil,2017,4.9
+24017,Charles,2017,4.1
+24019,Dorchester,2017,5.9
+24021,Frederick,2017,3.7
+24023,Garrett,2017,4
+24025,Harford,2017,4.0
+24027,Howard,2017,3.2
+24029,Kent,2017,4.6
+24031,Montgomery,2017,3.4
+24033,Prince George's,2017,4.3
+24035,Queen Anne's,2017,3.8
+24037,St. Mary's,2017,4.1
+24039,Somerset,2017,7.0
+24041,Talbot,2017,4.1
+24043,Washington,2017,4.8
+24045,Wicomico,2017,5.9
+24047,Worcester,2019,10
+24510,Baltimore City,2018,1
+,,,
