@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { getFirestore, collection, addDoc, setDoc, doc, Timestamp } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 
-
 const firebaseConfig = {
   apiKey: "AIzaSyD-LpxW3J2ztr1Q1cE_x8pPHv7JRNa4M9g",
   authDomain: "ag-map-d4af3.firebaseapp.com",
@@ -44,11 +43,11 @@ const countiesList = [
 ];
 
 const AddMapDate = () => {
-  const [percentValues, setPercentValues] = useState(Array(24).fill(1)); // Default percent value is 1
+  const [percentValues, setPercentValues] = useState(Array(24).fill({harvestPercent: 1, emergencePercent: 1, plantedPercent: 1}));
 
-  const handlePercentChange = (event, index) => {
+  const handlePercentChange = (event, index, field) => {
     let newPercentValues = [...percentValues];
-    newPercentValues[index] = event.target.value;
+    newPercentValues[index] = { ...newPercentValues[index], [field]: parseFloat(event.target.value)};
     setPercentValues(newPercentValues);
   };
 
@@ -63,7 +62,9 @@ const AddMapDate = () => {
     countiesList.forEach(async (county, index) => {
       await addDoc(countyHarvestsCollectionRef, {
         county: county,
-        percent: parseFloat(percentValues[index]),
+        harvestPercent: percentValues[index].harvestPercent,
+        emergencePercent: percentValues[index].emergencePercent,
+        plantedPercent: percentValues[index].plantedPercent,
       });
     });
 
@@ -74,11 +75,23 @@ const AddMapDate = () => {
     <form onSubmit={handleSubmit}>
       {countiesList.map((county, index) => (
         <div key={index}>
-          <label>{county} Percent:</label>
+          <label>{county} Harvest Percent:</label>
           <input 
             type="number"
-            value={percentValues[index]}
-            onChange={(event) => handlePercentChange(event, index)}
+            value={percentValues[index].harvestPercent}
+            onChange={(event) => handlePercentChange(event, index, 'harvestPercent')}
+          />
+          <label>{county} Emergence Percent:</label>
+          <input 
+            type="number"
+            value={percentValues[index].emergencePercent}
+            onChange={(event) => handlePercentChange(event, index, 'emergencePercent')}
+          />
+          <label>{county} Planted Percent:</label>
+          <input 
+            type="number"
+            value={percentValues[index].plantedPercent}
+            onChange={(event) => handlePercentChange(event, index, 'plantedPercent')}
           />
         </div>
       ))}

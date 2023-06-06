@@ -13,10 +13,6 @@ const firebaseConfig = {
   appId: "1:574258608297:web:4dc19cc58b6aff298dd1b8"
 };
 
-// Initialize Firebase
-// const app = initializeApp(firebaseConfig);
-// const db = getFirestore(app);
-
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
@@ -26,19 +22,18 @@ const MapChart = () => {
   const [data, setData] = useState([]);
   const [maps, setMaps] = useState([]);
   const [selectedMap, setSelectedMap] = useState(null);
+  const [colorField, setColorField] = useState("harvestPercent");
 
-  // Fetch list of maps on component mount
   useEffect(() => {
     const mapCollectionRef = collection(db, 'Map');
-    const q = query(mapCollectionRef, orderBy("date", "desc")); // sort by date in descending order
+    const q = query(mapCollectionRef, orderBy("date", "desc"));
     onSnapshot(q, (snapshot) => {
       const mapsData = snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
       setMaps(mapsData);
-      setSelectedMap(mapsData[0]); // set the first document (most recent) as selected
+      setSelectedMap(mapsData[0]);
     });
   }, []);
 
-  // Fetch data whenever selectedMap changes
   useEffect(() => {
     if (selectedMap) {
       const fetchData = async () => {
@@ -46,7 +41,6 @@ const MapChart = () => {
         const counties = querySnapshot.docs.map((doc) => doc.data());
         setData(counties);
       };
-  
       fetchData();
     }
   }, [selectedMap]);
@@ -73,6 +67,11 @@ const MapChart = () => {
 
   return (
     <>
+      <div>
+        <button onClick={() => setColorField("harvestPercent")}>Harvest</button>
+        <button onClick={() => setColorField("plantedPercent")}>Planted</button>
+        <button onClick={() => setColorField("emergencePercent")}>Emergence</button>
+      </div>
       <select onChange={handleMapSelect}>
         {maps.map(map => (
           <option key={map.id} value={map.id}>{map.data.date.toDate().toDateString()}</option>
@@ -87,7 +86,7 @@ const MapChart = () => {
                 <Geography
                   key={geo.rsmKey}
                   geography={geo}
-                  fill={colorScale(cur ? cur.percent : "#EEE")}
+                  fill={colorScale(cur ? cur[colorField] : "#EEE")}
                 />
               );
             })

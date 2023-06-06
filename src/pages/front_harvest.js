@@ -5,7 +5,7 @@ import { getFirestore } from "firebase/firestore";
 // https://firebase.google.com/docs/web/setup#available-libraries
 
 // Your web app's Firebase configuration
-
+//THIS IS SUPPOSED OT GLITCH OUT
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
@@ -31,42 +31,44 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// const docRef = doc(db, "Map/T3i0k3NiZ0aUdVua6VG8/CountyHarvests", "MNArB7S2BcoQ19pzLM3F");
-// const docSnap = await getDoc(docRef);
+const docRef = doc(db, "Map/T3i0k3NiZ0aUdVua6VG8/CountyHarvests", "MNArB7S2BcoQ19pzLM3F");
+const docSnap = await getDoc(docRef);
 
-// if (docSnap.exists()) {
-//   console.log("Document data:", docSnap.data());
-// } else {
-//   // docSnap.data() will be undefined in this case
-//   console.log("No such document!");
-// }
+if (docSnap.exists()) {
+  console.log("Document data:", docSnap.data());
+} else {
+  // docSnap.data() will be undefined in this case
+  console.log("No such document!");
+}
 
 
-// fs.readFile('./public/harvest.csv', 'utf8', function (err, data) {
-//   if (err) {
-//     console.error(err);
-//     return;
-//   }
+fs.readFile('./public/harvest.csv', 'utf8', function (err, data) {
+  if (err) {
+    console.error(err);
+    return;
+  }
 
-//   const results = Papa.parse(data, { header: true }).data;
+  const results = Papa.parse(data, { header: true }).data;
 
-//   const newMapDocRef = doc(collection(db, 'Map'));
-//   setDoc(newMapDocRef, { date: Timestamp.now() })
-//     .then(() => {
-//       const countyHarvestsCollectionRef = collection(newMapDocRef, 'CountyHarvests');
+  const newMapDocRef = doc(collection(db, 'Map'));
+  setDoc(newMapDocRef, { date: Timestamp.now() })
+    .then(() => {
+      const countyHarvestsCollectionRef = collection(newMapDocRef, 'CountyHarvests');
 
-//       // Add all counties as documents in the CountyHarvests collection of the new Map document
-//       results.forEach(function (row) {
-//         if (!row.name) return; // Ignore row if name (i.e., county) is missing
+      // Add all counties as documents in the CountyHarvests collection of the new Map document
+      results.forEach(function (row) {
+        if (!row.name) return; // Ignore row if name (i.e., county) is missing
 
-//         addDoc(countyHarvestsCollectionRef, {
-//           county: row.name,
-//           percent: parseFloat(row.harvest_percent),
-//         }).catch((error) => console.error("Error adding county: ", error));
-//       });
-//     })
-//     .catch((error) => console.error("Error creating Map document: ", error));
-// });
+        addDoc(countyHarvestsCollectionRef, {
+          county: row.name,
+          harvestPercent:  parseFloat(row.harvest_percent) ,
+          plantedPercent: 1,
+          emergencePercent: 1
+        }).catch((error) => console.error("Error adding county: ", error));
+      });
+    })
+    .catch((error) => console.error("Error creating Map document: ", error));
+});
 
 function HarvestPage() {
   <div>
@@ -78,3 +80,5 @@ function HarvestPage() {
   
 } export default HarvestPage;
 
+
+// const docRef = doc(db, "Map/bwkoONRvwYLUx2Npst1W/CountyHarvests", "8jk2Hwbe4NAld0xL2BYW");
