@@ -43,6 +43,7 @@ const countiesList = [
 ];
 
 const AddMapDate = () => {
+  const [crop, setCrop] = useState('corn');
   const [percentValues, setPercentValues] = useState(Array(24).fill({harvestPercent: 1, emergencePercent: 1, plantedPercent: 1}));
 
   const handlePercentChange = (event, index, field) => {
@@ -54,7 +55,7 @@ const AddMapDate = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     const db = getFirestore();
-    const newMapDocRef = doc(collection(db, 'Map'));
+    const newMapDocRef = doc(collection(db, `${crop.charAt(0).toUpperCase()}${crop.slice(1)}Map`));
     await setDoc(newMapDocRef, { date: Timestamp.now() });
 
     const countyHarvestsCollectionRef = collection(newMapDocRef, 'CountyHarvests');
@@ -73,6 +74,12 @@ const AddMapDate = () => {
 
   return (
     <form onSubmit={handleSubmit}>
+      <label>Crop Type:</label>
+      <select value={crop} onChange={(e) => setCrop(e.target.value)}>
+        <option value="corn">Corn</option>
+        <option value="wheat">Wheat</option>
+        <option value="soy">Soy</option>
+      </select>
       {countiesList.map((county, index) => (
         <div key={index}>
           <label>{county} Harvest Percent:</label>

@@ -3,6 +3,7 @@ import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { scaleQuantize } from "d3-scale";
 import { getFirestore, collection, getDocs, doc, onSnapshot, query, orderBy } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
+import { useRouter } from 'next/router';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD-LpxW3J2ztr1Q1cE_x8pPHv7JRNa4M9g",
@@ -24,26 +25,35 @@ const MapChart = () => {
   const [selectedMap, setSelectedMap] = useState(null);
   const [colorField, setColorField] = useState("harvestPercent");
 
+  const router = useRouter();
+  let { crop } = router.query;
+  if (crop) {
+    crop = crop.charAt(0).toUpperCase() + crop.slice(1);
+    if (crop == "Soybean"){
+      crop = "Soy";
+    }
+  }
+
   useEffect(() => {
-    const mapCollectionRef = collection(db, 'Map');
+    const mapCollectionRef = collection(db, `${crop}Map`);
     const q = query(mapCollectionRef, orderBy("date", "desc"));
     onSnapshot(q, (snapshot) => {
       const mapsData = snapshot.docs.map(doc => ({ id: doc.id, data: doc.data() }));
       setMaps(mapsData);
       setSelectedMap(mapsData[0]);
     });
-  }, []);
+  }, [crop]);
 
   useEffect(() => {
     if (selectedMap) {
       const fetchData = async () => {
-        const querySnapshot = await getDocs(collection(db, 'Map', selectedMap.id, 'CountyHarvests'));
+        const querySnapshot = await getDocs(collection(db, `${crop}Map`, selectedMap.id, 'CountyHarvests'));
         const counties = querySnapshot.docs.map((doc) => doc.data());
         setData(counties);
       };
       fetchData();
     }
-  }, [selectedMap]);
+  }, [selectedMap, crop]);
 
   const colorScale = scaleQuantize()
     .domain([1, 10])
