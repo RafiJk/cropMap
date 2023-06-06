@@ -1,0 +1,36 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f2f2f2;
+}
+
+.content {
+  text-align: center;
+}
+
+.title {
+  margin-bottom: 20px;
+  font-size: 2em;
+  color: #202124;
+}
+
+.searchInput {
+  margin-bottom: 20px;
+  padding: 10px;
+  font-size: 1.2em;
+  width: 600px;
+  height: 30px;
+}
+
+.select {
+  margin-bottom: 20px;
+  width: 300px;
+}
+
+.links {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}

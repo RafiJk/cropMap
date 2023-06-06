@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { getFirestore, collection, addDoc, setDoc, doc, Timestamp } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
+import { useRouter } from 'next/router';
+import Link from 'next/link';
+import styles from './AddMapDate.module.css'; // Assuming that you have an AddMapDate.module.css file with your styles.
 
 const firebaseConfig = {
   apiKey: "AIzaSyD-LpxW3J2ztr1Q1cE_x8pPHv7JRNa4M9g",
@@ -16,35 +19,20 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const countiesList = [
-  'Allegany',
-  'Anne Arundel',
-  'Baltimore',
-  'Calvert',
-  'Caroline',
-  'Carroll',
-  'Cecil',
-  'Charles',
-  'Dorchester',
-  'Frederick',
-  'Garrett',
-  'Harford',
-  'Howard',
-  'Kent',
-  'Montgomery',
-  'Prince George\'s',
-  'Queen Anne\'s',
-  'St. Mary\'s',
-  'Somerset',
-  'Talbot',
-  'Washington',
-  'Wicomico',
-  'Worcester',
-  'Baltimore City',
+  'Allegany', 'Anne Arundel', 'Baltimore', 'Calvert', 'Caroline',
+  'Carroll', 'Cecil', 'Charles', 'Dorchester', 'Frederick', 'Garrett',
+  'Harford', 'Howard', 'Kent', 'Montgomery', 'Prince George\'s',
+  'Queen Anne\'s', 'St. Mary\'s', 'Somerset', 'Talbot', 'Washington',
+  'Wicomico', 'Worcester', 'Baltimore City',
 ];
 
 const AddMapDate = () => {
   const [crop, setCrop] = useState('corn');
   const [percentValues, setPercentValues] = useState(Array(24).fill({harvestPercent: 1, emergencePercent: 1, plantedPercent: 1}));
+  const [password, setPassword] = useState('');
+  const [attempts, setAttempts] = useState(0);
+  const [showModal, setShowModal] = useState(true);
+  const router = useRouter();
 
   const handlePercentChange = (event, index, field) => {
     let newPercentValues = [...percentValues];
@@ -70,40 +58,74 @@ const AddMapDate = () => {
     });
 
     alert('New date with CountyHarvests added!');
+    router.push('/');
+  };
+
+  const handlePasswordChange = (event) => {
+    setPassword(event.target.value);
+  };
+
+  const handlePasswordSubmit = (event) => {
+    event.preventDefault();
+    if (password === '613') {
+      setShowModal(false);
+    } else {
+      setAttempts(attempts + 1);
+      if (attempts >= 4) {
+        router.push('/');
+      }
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <label>Crop Type:</label>
-      <select value={crop} onChange={(e) => setCrop(e.target.value)}>
-        <option value="corn">Corn</option>
-        <option value="wheat">Wheat</option>
-        <option value="soy">Soy</option>
-      </select>
-      {countiesList.map((county, index) => (
-        <div key={index}>
-          <label>{county} Harvest Percent:</label>
-          <input 
-            type="number"
-            value={percentValues[index].harvestPercent}
-            onChange={(event) => handlePercentChange(event, index, 'harvestPercent')}
-          />
-          <label>{county} Emergence Percent:</label>
-          <input 
-            type="number"
-            value={percentValues[index].emergencePercent}
-            onChange={(event) => handlePercentChange(event, index, 'emergencePercent')}
-          />
-          <label>{county} Planted Percent:</label>
-          <input 
-            type="number"
-            value={percentValues[index].plantedPercent}
-            onChange={(event) => handlePercentChange(event, index, 'plantedPercent')}
-          />
+    <div>
+      {showModal ? (
+        <div className={styles.modal}>
+          <form onSubmit={handlePasswordSubmit}>
+            <h2>Enter Password</h2>
+            <input type="password" value={password} onChange={handlePasswordChange} />
+            <button type="submit">Submit</button>
+            <Link href="/"><button>Go Back</button></Link>
+          </form>
         </div>
-      ))}
-      <button type="submit">Add New Date</button>
-    </form>
+      ) : (
+        <>
+          <Link href="/"><button>Home</button></Link>
+          <form onSubmit={handleSubmit} className={styles.form}>
+            <label>Crop Type:</label>
+            <select value={crop} onChange={(e) => setCrop(e.target.value)}>
+              <option value="corn">Corn</option>
+              <option value="wheat">Wheat</option>
+              <option value="soy">Soy</option>
+            </select>
+            {countiesList.map((county, index) => (
+              <div key={index} className={styles.inputGroup}>
+                <label>{county}</label>
+                <input 
+                  type="number"
+                  placeholder="Harvest Percent"
+                  value={percentValues[index].harvestPercent}
+                  onChange={(event) => handlePercentChange(event, index, 'harvestPercent')}
+                />
+                <input 
+                  type="number"
+                  placeholder="Emergence Percent"
+                  value={percentValues[index].emergencePercent}
+                  onChange={(event) => handlePercentChange(event, index, 'emergencePercent')}
+                />
+                <input 
+                  type="number"
+                  placeholder="Planted Percent"
+                  value={percentValues[index].plantedPercent}
+                  onChange={(event) => handlePercentChange(event, index, 'plantedPercent')}
+                />
+              </div>
+            ))}
+            <button type="submit">Add New Date</button>
+          </form>
+        </>
+      )}
+    </div>
   );
 };
 
