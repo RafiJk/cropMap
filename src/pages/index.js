@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react'; //use is a hook...hooks are like instance variabels
 import Link from 'next/link';  //Link gives you lin k abilities
 import { useRouter } from 'next/router'; //again navigation stuff 
@@ -41,7 +42,7 @@ const HomePage = () => {
    <div>
      <nav>
        <Link href="/">Home</Link>
-       <Link href="/harvest">Update Harvest</Link>
+       <Link href="/addMapDate">Update Harvest</Link>
      </nav>
      <h1>Home Page</h1>
      <input

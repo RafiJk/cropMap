@@ -9,8 +9,8 @@ id,name,year,harvest_percent
 24017,Charles,2017,4.1
 24019,Dorchester,2017,5.9
 24021,Frederick,2017,3.7
-24023,Garrett,2017,4
-24025,Harford,2017,4.0
+24023,Garrett,2019,10
+24025,Harford,2017,4.02
 24027,Howard,2017,3.2
 24029,Kent,2017,4.6
 24031,Montgomery,2017,3.4
@@ -20,7 +20,7 @@ id,name,year,harvest_percent
 24039,Somerset,2017,7.0
 24041,Talbot,2017,4.1
 24043,Washington,2017,4.8
-24045,Wicomico,2017,5.9
-24047,Worcester,2019,10
-24510,Baltimore City,2018,1
+24045,Wicomico,2024,7
+24047,Worcester,2030,10
+24510,Baltimore City,2090,10
 ,,,

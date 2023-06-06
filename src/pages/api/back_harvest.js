@@ -1,8 +1,19 @@
+// Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+
+
 import fs from 'fs';
 import csv from 'csv-parser';
 import { createObjectCsvWriter } from 'csv-writer';
 
+// Initialize Firebase
+
 export default (req, res) => {
+  console.log("back");
   if (req.method === 'GET') {
     const data = [];
     fs.createReadStream('/Users/rjkigner/projects/pest-map/public/harvest.csv')
