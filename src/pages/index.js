@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
-import styles from './index.module.css'; 
+import styles from '/Users/rjkigner/projects/pest-map/src/pages/index.module.css';
+
 
 const HomePage = () => {
+  const [activeTab, setActiveTab] = useState('Home');
   const [searchTerm, setSearchTerm] = useState('');
   const router = useRouter();
 
@@ -36,8 +37,25 @@ const HomePage = () => {
 
   return (
     <div className={styles.container}>
+      <div className={styles.header}>
+        <div className={styles.logo}> <div className={styles.sublogo}>powered by</div>Phritzda</div>\
+        <div className={styles.links}>
+          {/* <button 
+            className={activeTab === 'Home' ? styles.activeTab : styles.tabButton} 
+            onClick={() => { setActiveTab('Home'); router.push('/'); }}
+          >
+            Home
+          </button> */}
+          <button 
+            className={activeTab === 'Update Harvest' ? styles.activeTab : styles.tabButton} 
+            onClick={() => { setActiveTab('Update Harvest'); router.push('/addMapDate'); }}
+          >
+            Update Harvest
+          </button>
+        </div>
+      </div>
       <div className={styles.content}>
-        <h1 className={styles.title}>Pest Map</h1>
+        <h1 className={styles.title}>Crop Map</h1>
         <input
           type="text"
           placeholder="Search Wheat, Soybean, or Corn"
@@ -52,10 +70,6 @@ const HomePage = () => {
             ))}
           </select>
         )}
-        <div className={styles.links}>
-          <Link href="/">Home</Link>
-          <Link href="/addMapDate">Update Harvest</Link>
-        </div>
       </div>
     </div>
   );

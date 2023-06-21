@@ -1,9 +1,10 @@
+
 import React, { useState } from "react";
 import { getFirestore, collection, addDoc, setDoc, doc, Timestamp } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { useRouter } from 'next/router';
 import Link from 'next/link';
-import styles from './AddMapDate.module.css'; // Assuming that you have an AddMapDate.module.css file with your styles.
+import styles from './addMapDate.module.css'; // Assuming that you have an AddMapDate.module.css file with your styles.
 
 const firebaseConfig = {
   apiKey: "AIzaSyD-LpxW3J2ztr1Q1cE_x8pPHv7JRNa4M9g",

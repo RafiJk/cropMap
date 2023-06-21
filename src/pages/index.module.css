@@ -1,36 +1,101 @@
 .container {
+  position: relative;
+  width: 100%;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background-color: #f2f2f2;
 }
+
+* .container, .container::before, .content, .title, .searchInput, .select, .header {
+  box-sizing: border-box;
+}
+
+.container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: url('/mapformap.jpeg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  opacity: 1.0 ;  /* Change this to lighten or darken the image */
+}
+
+.tabButton {
+  background-color: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+  color: white; /* Make the text color white */
+}
+
+.tabButton:hover {
+  background-color: #ddd;
+}
+
+.activeTab {
+  background-color: #ccc;
+  color: white;
+}
+
 
 .content {
   text-align: center;
+  z-index: 1;  /* Ensure the content appears above the image */
+  color: #fff;  /* Set text color to white */
 }
 
 .title {
   margin-bottom: 20px;
   font-size: 2em;
-  color: #202124;
 }
 
 .searchInput {
   margin-bottom: 20px;
   padding: 10px;
   font-size: 1.2em;
-  width: 600px;
+  width: 100%;
   height: 30px;
 }
 
+.sublogo{
+  color: #fff;
+  margin-right: auto;  /* Push everything else to the right */
+  font-size: 20px;
+}
+
 .select {
-  margin-bottom: 20px;
-  width: 300px;
+  margin-bottom: 0px;
+  width: 80%;
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 110px;
+  background: rgba(0,0,0,0.5);  /* Semi-transparent black */
+  display: flex;
+  align-items: center;
+  padding-left: 20px;  /* Padding to the left of the logo */
+  z-index: 2;  /* Ensure the header appears above the image and content */
+}
+
+.logo {
+  color: #fff;
+  margin-right: auto;  /* Push everything else to the right */
+  font-size: 34px;
 }
 
 .links {
   display: flex;
-  justify-content: center;
   gap: 20px;
+  margin-left: 100px;  /* Space between the logo and the links */
 }
