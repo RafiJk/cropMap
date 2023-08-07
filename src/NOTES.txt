@@ -3,5 +3,9 @@ B"SD
 1. GOAL FOR TOMOROW...MAKE MY BLOTCHES...DO IT OFF SAMPLE DATA...
 2. https://github.com/deldersveld/topojson/tree/master/countries/united-states
 Maryland map comes from there
+[0.0010595839386395459, 0.000747169277375152]
+
+https://raw.githubusercontent.com/deldersveld/topojson/master/countries/us-states/WV-54-west-virginia-counties.json
+everythign currentluy times .6 and then times .8 times .8 again
 
 am i going ot need a way to change to read from api not csv

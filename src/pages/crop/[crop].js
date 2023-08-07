@@ -4,8 +4,9 @@ import { scaleQuantize } from "d3-scale";
 import { getFirestore, collection, getDocs, onSnapshot, query, orderBy } from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { useRouter } from 'next/router';
-import Header from '../components/Header'; // Assuming Header.js is inside a 'components' directory
+import Header from '../components/Header';
 import { Button, FormControl, InputLabel, MenuItem, Select, Box } from "@mui/material";
+import styles from "../MapChart.module.css"; // Import the CSS file
 
 const firebaseConfig = {
   apiKey: "AIzaSyD-LpxW3J2ztr1Q1cE_x8pPHv7JRNa4M9g",
@@ -19,7 +20,12 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const geoUrl = "/TheGreatStateOfMaryland.json";
+const DEUrl = "/theRealStateOfDE.json"; //dude watch the names
+const MDUrl = "/theRealStateOfMD.json";
+const WVUrl = "/theRealStateOfWV.json";
+const VAUrl = "/theRealStateOfVA.json";
+const PAUrl = "/theRealStateOfPA.json";
+
 
 const MapChart = () => {
   const [data, setData] = useState([]);
@@ -32,7 +38,7 @@ const MapChart = () => {
   let { crop } = router.query;
   if (crop) {
     crop = crop.charAt(0).toUpperCase() + crop.slice(1);
-    if (crop === "Soybean"){
+    if (crop === "Soybean") {
       crop = "Soy";
     }
   }
@@ -59,7 +65,7 @@ const MapChart = () => {
   }, [selectedMap, crop]);
 
   const colorScale = scaleQuantize()
-    .domain([1, 10])
+    .domain([0, 100])
     .range([
       "#ffedea",
       "#ffcec5",
@@ -86,13 +92,13 @@ const MapChart = () => {
   return (
     <>
       <Header />
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", marginTop: "1rem" }}>
-        <div style={{ flex: "0 0 70%", marginRight: "1rem" }}>
-          <ComposableMap projection="geoAlbersUsa" style={{ height: "calc(100vh - 0px)" }}>
-            <Geographies geography={geoUrl}>
+      <div className={styles.mapChartContainer}>
+        <div className={styles.mapContainer}>
+        <ComposableMap projection="geoAlbersUsa" projectionConfig={{ scale: 1000 }} style={{ height: "100vh" }}>
+            <Geographies geography={MDUrl}>
               {({ geographies }) =>
-                geographies.map(geo => {
-                  const cur = data.find(s => s.county === geo.properties.NAME);
+                geographies.map((geo) => {
+                  const cur = data.find((s) => s.county === geo.properties.NAME);
                   const isHighlighted = cur && cur === selectedCounty;
                   return (
                     <Geography
@@ -103,18 +109,176 @@ const MapChart = () => {
                       onMouseLeave={() => handleCountyClick(cur)}
                       style={{
                         default: {
-                          outline: "none"
+                          outline: "none",
+                          stroke: "#fff",
+                          strokeWidth: 0.5,
                         },
                         hover: {
-                          outline: "none"
+                          outline: "none",
+                          stroke: "black",
+                          strokeWidth: 0.5,
                         },
                         pressed: {
-                          outline: "none"
+                          outline: "none",
+                          stroke: "black",
+                          strokeWidth: 0.5,
                         },
                         highlight: {
                           fill: "#F53",
-                          outline: "none"
-                        }
+                          outline: "none",
+                        },
+                      }}
+                    />
+                  );
+                })
+              }
+            </Geographies>
+            <Geographies geography={VAUrl}>
+              {({ geographies }) =>
+                geographies.map((geo) => {
+                  const cur = data.find((s) => s.county === geo.properties.NAME);
+                  const isHighlighted = cur && cur === selectedCounty;
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      fill={colorScale(cur ? cur[colorField] : "#EEE")}
+                      onMouseEnter={() => handleCountyClick(cur)}
+                      onMouseLeave={() => handleCountyClick(cur)}
+                      style={{
+                        default: {
+                          outline: "none",
+                          stroke: "#fff",
+                          strokeWidth: 0.5,
+                        },
+                        hover: {
+                          outline: "none",
+                          stroke: "black",
+                          strokeWidth: 0.5,
+                        },
+                        pressed: {
+                          outline: "none",
+                          stroke: "black",
+                          strokeWidth: 0.5,
+                        },
+                        highlight: {
+                          fill: "#F53",
+                          outline: "none",
+                        },
+                      }}
+                    />
+                  );
+                })
+              }
+            </Geographies>
+            <Geographies geography={DEUrl}>
+              {({ geographies }) =>
+                geographies.map((geo) => {
+                  const cur = data.find((s) => s.county === geo.properties.NAME);
+                  const isHighlighted = cur && cur === selectedCounty;
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      fill={colorScale(cur ? cur[colorField] : "#EEE")}
+                      onMouseEnter={() => handleCountyClick(cur)}
+                      onMouseLeave={() => handleCountyClick(cur)}
+                      style={{
+                        default: {
+                          outline: "none",
+                          stroke: "#fff",
+                          strokeWidth: 0.5,
+                        },
+                        hover: {
+                          outline: "none",
+                          stroke: "black",
+                          strokeWidth: 0.5,
+                        },
+                        pressed: {
+                          outline: "none",
+                          stroke: "black",
+                          strokeWidth: 0.5,
+                        },
+                        highlight: {
+                          fill: "#F53",
+                          outline: "none",
+                        },
+                      }}
+                    />
+                  );
+                })
+              }
+            </Geographies>
+            <Geographies geography={PAUrl}>
+              {({ geographies }) =>
+                geographies.map((geo) => {
+                  const cur = data.find((s) => s.county === geo.properties.NAME);
+                  const isHighlighted = cur && cur === selectedCounty;
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      fill={colorScale(cur ? cur[colorField] : "#EEE")}
+                      onMouseEnter={() => handleCountyClick(cur)}
+                      onMouseLeave={() => handleCountyClick(cur)}
+                      style={{
+                        default: {
+                          outline: "none",
+                          stroke: "#fff",
+                          strokeWidth: 0.5,
+                        },
+                        hover: {
+                          outline: "none",
+                          stroke: "black",
+                          strokeWidth: 0.5,
+                        },
+                        pressed: {
+                          outline: "none",
+                          stroke: "black",
+                          strokeWidth: 0.5,
+                        },
+                        highlight: {
+                          fill: "#F53",
+                          outline: "none",
+                        },
+                      }}
+                    />
+                  );
+                })
+              }
+            </Geographies>
+            <Geographies geography={WVUrl}>
+              {({ geographies }) =>
+                geographies.map((geo) => {
+                  const cur = data.find((s) => s.county === geo.properties.NAME);
+                  const isHighlighted = cur && cur === selectedCounty;
+                  return (
+                    <Geography
+                      key={geo.rsmKey}
+                      geography={geo}
+                      fill={colorScale(cur ? cur[colorField] : "#EEE")}
+                      onMouseEnter={() => handleCountyClick(cur)}
+                      onMouseLeave={() => handleCountyClick(cur)}
+                      style={{
+                        default: {
+                          outline: "none",
+                          stroke: "#fff",
+                          strokeWidth: 0.5,
+                        },
+                        hover: {
+                          outline: "none",
+                          stroke: "black",
+                          strokeWidth: 0.5,
+                        },
+                        pressed: {
+                          outline: "none",
+                          stroke: "black",
+                          strokeWidth: 0.5,
+                        },
+                        highlight: {
+                          fill: "#F53",
+                          outline: "none",
+                        },
                       }}
                     />
                   );
@@ -123,40 +287,60 @@ const MapChart = () => {
             </Geographies>
           </ComposableMap>
         </div>
-        <div style={{ flex: "0 0 30%" }}>
-          <div style={{ marginBottom: "1rem" }}>
-            <Button variant="contained" sx={{ marginRight: 1, minWidth: 100 }} onClick={() => setColorField("harvestPercent")}>
-              Harvest
-            </Button>
-            <Button variant="contained" sx={{ marginRight: 1, minWidth: 100 }} onClick={() => setColorField("plantedPercent")}>
-              Planted
-            </Button>
-            <Button variant="contained" sx={{ minWidth: 100 }} onClick={() => setColorField("emergencePercent")}>
-              Emergence
-            </Button>
-          </div>
-          <FormControl sx={{ minWidth: 200, marginBottom: "1rem" }}>
-            <InputLabel id="map-select-label">Select Date</InputLabel>
-            <Select
-              labelId="map-select-label"
-              id="map-select"
-              value={selectedMap ? selectedMap.id : ""}
-              onChange={handleMapSelect}
-            >
-              {maps.map(map => (
-                <MenuItem key={map.id} value={map.id}>{map.data.date.toDate().toDateString()}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
-          {selectedCounty && (
-            <Box sx={{ marginBottom: "1rem", p: 1, backgroundColor: "#f0f0f0", minWidth: 200 }}>
-              {`${selectedCounty.county}: ${selectedCounty[colorField]}%`}
-            </Box>
-          )}
+        <Box className={styles.buttonBox}> {/* Use the .buttonBox class here */}
+        <div className= {styles.mapInfoContainer}>
+          <div className={styles.mapInfoButtons}>
+              <Button
+                variant="contained"
+                className={styles.mapInfoButton}
+                onClick={() => setColorField("harvestPercent")}
+              >
+                Harvest
+              </Button>
+              <Button
+                variant="contained"
+                className={styles.mapInfoButton}
+                onClick={() => setColorField("plantedPercent")}
+              >
+                Planted
+              </Button>
+              <Button
+                variant="contained"
+                className={styles.mapInfoButton}
+                onClick={() => setColorField("emergencePercent")}
+              >
+                Emergence
+              </Button>
+            </div>
+            <FormControl fullWidth className= {styles.mapSelect}>
+              <InputLabel id="map-select-label">Select Date</InputLabel>
+              <Select
+                labelId="map-select-label"
+                id="map-select"
+                value={selectedMap ? selectedMap.id : ""}
+                onChange={handleMapSelect}
+              >
+                {maps.map((map) => (
+                  <MenuItem key={map.id} value={map.id}>
+                    {map.data.date.toDate().toDateString()}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+            {selectedCounty && (
+              <Box className= {styles.mapInfoBoxSelected}>
+                {`${selectedCounty.county}: ${selectedCounty[colorField]}%`}
+              </Box>
+            )}
+     
         </div>
+        </Box>
       </div>
     </>
   );
-};
+}
 
-export default MapChart;
+  export default MapChart;
+
+  // [0.0171,0.0123] MD GEO 
+  //[0.01862570554,0.012452821289585868] DE GEO

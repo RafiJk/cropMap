@@ -7,6 +7,7 @@
   margin: auto;
 }
 
+
 .inputGroup {
   display: flex;
   flex-direction: column;
@@ -46,3 +47,5 @@
 .submitButton:hover {
   background-color: #0056b3;
 }
+
+

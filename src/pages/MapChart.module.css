@@ -1,0 +1,78 @@
+/* MapChart.css */
+.mapChartContainer {
+  padding: 1px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  
+}
+
+.buttonBox {
+  padding: 15px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  margin-Top: 1rem;
+  border-radius: 10px;
+  background-color: #fff;
+  width: 100%; /* Set the width to 80% of the parent container */
+  max-width: 400px; /* Optionally, set a maximum width to avoid stretching too much */
+}
+
+.mapInfoBox {
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.mapInfoButtons {
+  margin-bottom: 1rem;
+}
+
+.mapInfoButtons button {
+  margin-left: 2px;
+  margin-right: 6px;
+  min-width: 100px;
+}
+
+.mapSelect {
+  margin-bottom: 1rem;
+  width: 100%;
+}
+
+.mapInfoBoxSelected {
+  padding: 1px;
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  min-width: 200px;
+}
+
+/* MapChart.module.css */
+
+.mapContainer {
+  /* flex: 0 0 75%; */ /* Remove this line */
+  margin-right: 1rem;
+  /* height: 80vh; */ /* Remove this line */
+  height: 550px; /* Set a fixed height for the map container, adjust as needed */
+  width: 60%; /* Adjust the width of the map container as needed */
+  margin: 0 auto; /* Center the map container on the page */
+  border: 1px solid #ddd; /* Adjust border properties as needed */
+  border-radius: 10px; /* Optionally, add border radius for rounded corners */
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1); 
+  border: 1px solid #ddd; /* Adjust border properties as needed */
+  border-radius: 10px; /* Optionally, add border radius for rounded corners */
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1); 
+}
+
+.theMap {
+  height: 50px;
+}
+
+.mapInfoContainer {
+  /* flex: 0 0 2%; */ /* Remove this line */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

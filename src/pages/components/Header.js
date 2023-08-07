@@ -20,15 +20,15 @@ const Header = () => {
           <br />
           Phritzda
         </Typography>
-        <Link href="/addMapDate">
-          <Button color="inherit">Update Harvest</Button>
+        <Link href="/selectMapDate">
+          <Button color="inherit" style={{ backgroundColor: 'transparent', color: 'white' }}>Update Harvest</Button>
         </Link>
           <Link href='./about'>
-          <Button color="inherit">About</Button> 
+          <Button color="inherit" style={{ backgroundColor: 'transparent', color: 'white' }}>About</Button> 
         </Link>
         {!isHomePage && (
             <Link href="/">
-              <Button color="inherit">Home</Button>
+              <Button color="inherit" style={{ backgroundColor: 'transparent', color: 'white' }}>Home</Button>
             </Link>
           )}
       </Toolbar>
