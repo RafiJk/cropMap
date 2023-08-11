@@ -1,0 +1,15 @@
+.colorrectangle {
+  display: flex;
+  align-items: center;
+}
+
+.colorbox {
+  width: 14px;
+  height: 18px;
+  margin-right: 2px; /* Adjust the margin as needed */
+}
+
+.percentage {
+  font-size: 12px;
+  margin: 0 2px; /* Adjust the margin as needed */
+}

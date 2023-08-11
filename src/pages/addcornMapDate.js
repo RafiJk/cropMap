@@ -1,20 +1,18 @@
-
+//BSD
 import React, { useState, useEffect } from "react";
 import { getDoc } from 'firebase/firestore';
 import { getFirestore, collection, updateDoc, setDoc, doc, onSnapshot, Timestamp, query, orderBy, limit,  getDocs} from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { useRouter } from 'next/router';
 import Header from './components/Header';
-import Link from 'next/link';
 import styles from './addMapDate.module.css';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField'; 
 import { ComposableMap, Geographies, Geography } from "react-simple-maps";
 import { scaleQuantize } from "d3-scale";
-import { Button, Container, syled, FormControl, InputLabel, MenuItem, Select, Box } from "@mui/material";
+import { Container } from "@mui/material";
+import { countiesListDE, countiesListMD, countiesListPA, countiesListVA, countiesListWV } from "./countiesList";
 
-
-const geoUrl = "/theRealStateOfDE.json"; //dude watch the names
 
 const firebaseConfig = {
   apiKey: "AIzaSyD-LpxW3J2ztr1Q1cE_x8pPHv7JRNa4M9g",
@@ -36,179 +34,17 @@ const WVUrl = "/theRealStateOfWV.json";
 const VAUrl = "/theRealStateOfVA.json";
 const PAUrl = "/theRealStateOfPA.json";
 
-const percentTypeOptions = [
-  { label: 'Harvest Percent', value: 'harvestPercent' },
-  { label: 'Emergence Percent', value: 'emergencePercent' },
-  { label: 'Planted Percent', value: 'plantedPercent' },
-  // Add more percent options as needed
-];
+const stateUrlMap = {"DE": DEUrl, "MD": MDUrl, "WV": WVUrl, "VA": VAUrl, "PA": PAUrl };
 
-const countiesListMD = [
-  'Allegany MD', 'Anne Arundel MD', 'Baltimore MD', 'Calvert MD', 'Caroline MD',
-  'Carroll MD', 'Cecil MD', 'Charles MD', 'Dorchester MD', 'Frederick MD', 'Garrett MD',
-  'Harford MD', 'Howard MD', 'Kent MD', 'Montgomery MD', 'Prince George\'s MD',
-  'Queen Anne\'s MD', 'St. Mary\'s MD', 'Somerset MD', 'Talbot MD', 'Washington MD',
-  'Wicomico MD', 'Worcester MD', 'Baltimore City MD',
-];
+const countiesByState = {"DE": countiesListDE, "MD": countiesListMD, "WV": countiesListWV,
+  "VA": countiesListVA, "PA": countiesListPA
+};
 
-const countiesListDE = [
-  'New Castle DE', 'Sussex DE', 'Kent DE'
-];
-
-const countiesListVA = [
-  'Accomack', 
-  'Albemarle',
-  'Alexandria', 'Alleghany VA', 'Amelia', 'Amherst', 
-  'Appomattox', 'Arlington', 'Augusta', 'Bath', 'Bedford', 'Bland',
-   'Botetourt', 'Bristol', 'Brunswick', 'Buchanan', 'Buckingham', 'Buena Vista',
-   'Campbell', 'Caroline VA', 'Carroll VA', 'Charles City',
-   'Charlotte', 'Charlottesville', 'Chesapeake', 'Chesterfield', 'Clarke', 
-   'Colonial Heights','Covington', 'Craig', 'Culpeper', 'Cumberland', 
-   'Danville', 'Dickenson', 'Dinwiddie', 'Emporia', 'Essex', 'Fairfax',
-   'Falls Church',  'Fauquier', 'Floyd', 'Fluvanna', 'Franklin', 'Franklin', 
-   'Frederick VA', 'Fredericksburg', 
-   'Galax', 'Giles', 'Gloucester', 'Goochland', 'Grayson', 'Greene VA', 
-   'Greensville', 'Halifax', 'Hampton', 'Hanover', 'Harrisonburg'
-   , 'Henrico', 'Henry', 'Highland', 'Hopewell', 'Isle of Wight', 
-   'James City', 'King and Queen', 'King George', 'King William',
-   'Lancaster', 'Lee', 'Lexington', 'Loudoun', 'Louisa', 'Lunenburg', 
-   'Lynchburg', 'Madison', 'Manassas', 'Martinsville', 'Mathews', 
-   'Mecklenburg', 'Middlesex', 'Montgomery VA', 'Nelson', 'New Kent', 'Newport',
-    'News', 'Norfolk', 'Northampton', 'Northumberland', 'Norton', 'Nottoway', 
-    'Orange', 'Page', 'Patrick', 'Petersburg', 'Pittsylvania', 'Poquoson', 'Portsmouth', 'Powhatan', 'Prince Edward', 'Prince George', 'Prince William',
-    'Pulaski', 'Radford', 'Rappahannock', 'Richmond', 'Richmond', 'Roanoke', 
-    'Rockbridge', 'Rockingham', 'Russell', 'Salem', 'Scott', 'Shenandoah',
-     'Smyth', 'Southampton', 'Spotsylvania', 'Stafford', 'Staunton', 'Suffolk', 
-     'Surry', 'Sussex VA', 'Tazewell', 'Virginia Beach', 'Warren', 'Washington VA', 
-     'Waynesboro', 'Westmoreland', 'Williamsburg', 'Winchester', 
-     'Wise', 'Wythe', 'York VA'];
-
-const countiesListWV = [
-"Barbour", 
-"Berkeley", 
-"Boone",
- "Braxton",
-  "Brooke",
-"Cabell",
-"Calhoun",
-"Clay",
-"Doddridge",
-"Fayette",
-"Gilmer",
-"Grant",
-"Greenbrier",
-"Hampshire",
-"Hancock",
-"Hardy",
-"Harrison",
-"Jackson",
-"Jefferson",
-"Kanawha",
-"Lewis",
-"Lincoln",
-    "Logan",
-    "Marion",
-    "Marshall",
-    "Mason",
-    "McDowell",
-    "Mercer",
-    "Mineral",
-    "Mingo",
-    "Monongalia",
-    "Monroe",
-    "Morgan",
-    "Nicholas",
-    "Ohio",
-    "Pendleton",
-    "Pleasants",
-    "Pocahontas",
-    "Preston",
-    "Putnam",
-    "Raleigh",
-    "Randolph",
-    "Ritchie",
-    "Roane",
-    "Summers",
-    "Taylor",
-    "Tucker",
-    "Tyler",
-    "Upshur",
-    "Wayne",
-    "Webster",
-    "Wetzel",
-    "Wirt",
-    "Wood",
-    "Wyoming"];
-
-const countiesListPA = ["Adams",
-"Allegheny",
-"Armstrong",
-"Beaver",
-"Bedford",
-"Berks",
-"Blair",
-"Bradford",
-"Bucks",
-"Butler",
-"Cambria",
-"Cameron",
-"Carbon",
-"Centre",
-"Chester",
-"Clarion",
-"Clearfield",
-"Clinton",
-"Columbia PA",
-"Crawford",
-"Cumberland",
-"Dauphin",
-"Delaware",
-"Elk",
-"Erie",
-"Fayette",
-"Forest",
-"Franklin",
-"Fulton",
-"Greene PA",
-"Huntingdon",
-"Indiana","Jefferson",
-"Juniata",
-"Lackawanna",
-"Lancaster",
-"Lawrence",
-"Lebanon",
-"Lehigh",
-"Luzerne",
-"Lycoming",
-"McKean",
-"Mercer",
-"Mifflin",
-"Monroe",
-"Montgomery PA",
-"Montour",
-"Northampton",
-"Northumberland",
-"Perry",
-"Philadelphia",
-"Pike",
-"Potter",
-"Schuylkill",
-"Snyder",
-"Somerset PA",
-"Sullivan",
-"Susquehanna",
-"Tioga",
-"Union",
-"Venango",
-"Warren",
-"Washington PA",
-"Wayne",
-"Westmoreland",
-"Wyoming",
-"York"]
-
-
-
+// const percentTypeOptions = [
+//   { label: 'Harvest Percent', value: 'harvestPercent' },
+//   { label: 'Emergence Percent', value: 'emergencePercent' },
+//   { label: 'Planted Percent', value: 'plantedPercent' },
+// ];
 
 const mostRecentDocument = async (smq) => {
   try { //the dates aren't valid...eitehr of them
@@ -244,59 +80,25 @@ const mostRecentDocument = async (smq) => {
   }
 };
 
+
 const NewDocMaker = () => {
   const newMapDocRef = doc(collection(db, "CornMap"));
-  setDoc(newMapDocRef, { date: Timestamp.now() }).then(() => {
+  setDoc(newMapDocRef, { date: Timestamp.now() }).then(async () => {
     const countyHarvestsCollectionRef = collection(newMapDocRef, 'CountyHarvests');
-    for (const county of countiesListDE) {
-      const newHarvestDocRef = doc(countyHarvestsCollectionRef, county);
-      setDoc(newHarvestDocRef, {
-        state: 'DE',
-        county: county,
-        plantedPercent: 0,
-        emergencePercent: 0,
-        harvestPercent: 0,
-      });
-    }
-    for (const county of countiesListMD) {
-      const newHarvestDocRef = doc(countyHarvestsCollectionRef, county);
-      setDoc(newHarvestDocRef, {
-        state: 'MD',
-        county: county,
-        plantedPercent: 0,
-        emergencePercent: 0,
-        harvestPercent: 0,
-      });
-    }
-    for (const county of countiesListVA) {
-      const newHarvestDocRef = doc(countyHarvestsCollectionRef, county);
-      setDoc(newHarvestDocRef, {
-        state: 'VA',
-        county: county,
-        plantedPercent: 0,
-        emergencePercent: 0,
-        harvestPercent: 0,
-      });
-    }
-    for (const county of countiesListWV) {
-      const newHarvestDocRef = doc(countyHarvestsCollectionRef, county);
-      setDoc(newHarvestDocRef, {
-        state: 'WV',
-        county: county,
-        plantedPercent: 0,
-        emergencePercent: 0,
-        harvestPercent: 0,
-      });
-    }
-    for (const county of countiesListPA) {
-      const newHarvestDocRef = doc(countyHarvestsCollectionRef, county);
-      setDoc(newHarvestDocRef, {
-        state: 'PA',
-        county: county,
-        plantedPercent: 0,
-        emergencePercent: 0,
-        harvestPercent: 0,
-      });
+    
+    for (const state in countiesByState) {
+      const stateCounties = countiesByState[state];
+      
+      for (const county of stateCounties) {
+        const newHarvestDocRef = doc(countyHarvestsCollectionRef, county);
+        setDoc(newHarvestDocRef, {
+          state: state,
+          county: county,
+          plantedPercent: 0,
+          emergencePercent: 0,
+          harvestPercent: 0,
+        });
+      }
     }
   });
   return true;
@@ -319,38 +121,11 @@ const AddHarvest = () => {
 
   // const selectedStateCountyList = `countyList${selectedState}`;
 
-  let countiesList = null;
 
-  if (selectedState == 'DE'){
-    countiesList = countiesListDE;
-  }else if (selectedState == 'PA'){
-    countiesList = countiesListPA;
-  }else if (selectedState == 'VA'){
-    countiesList = countiesListVA;
-  }else if (selectedState == 'WV'){
-    countiesList = countiesListWV;
-  }else if (selectedState == 'MD'){
-    countiesList = countiesListMD;
-  }else{
-    countiesList = countiesListMD; //currently defaults to MD...this isn't good but wont build if accidental null
-  }
+  const countiesList = countiesByState[selectedState] || countiesListMD;
 
 
-let url = "";
-
-if (selectedState == "DE") {
-  url = DEUrl;
-} else if (selectedState == "MD") {
-  url = MDUrl;
-} else if (selectedState == "WV") {
-  url = WVUrl;
-} else if (selectedState == "VA") {
-  url = VAUrl;
-} else if (selectedState == "PA") {
-  url = PAUrl;
-} else {
-  // The selected state is not valid.
-}
+  let url = stateUrlMap[selectedState] || "";
 
 
   const [loading, setLoading] = useState(true);
@@ -377,17 +152,17 @@ if (selectedState == "DE") {
   const colorScale = scaleQuantize()
     .domain([0, 100]) // Adjust the domain based on your data range
        .range([
-        "#ffedea",
-        "#ffcec5",
-        "#ffad9f",
-        "#ff8a75",
-        "#ff5533",
-        "#e2492d",
-        "#be3d26",
-        "#9a311f",
-        "#782618"
-      ]);
-
+          "#c0c0c0",
+          "#ffedea",
+          "#ffcec5",
+          "#ffad9f",
+          "#ff8a75",
+          "#ff5533",
+          "#e2492d",
+          "#be3d26",
+          "#9a311f",
+          "#782618"
+        ]);
   // Update the fill color of the counties based on the selectedPercentType
   const handleMapFill = (county) => {
     if (county && countyData[county] && selectedPercentType) {
@@ -399,74 +174,77 @@ if (selectedState == "DE") {
     setSelectedCounty(county === selectedCounty ? null : county);
   };
 
+useEffect (()=>{
+  const fetchData = async () => {
+    const CornMapQuery = query(CornMapCollection, orderBy("date", "desc"), limit(1));
+    const stepone = await mostRecentDocument(CornMapQuery);
+    let steptwo = false;
+    if (stepone === true) {
+      steptwo = NewDocMaker();
+    } else {
+      steptwo = false;
+    }
+    // setSteptwo(steptwo);
+    setLoading(false);
+  };
 
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const CornMapQuery = query(CornMapCollection, orderBy("date", "desc"), limit(1));
-      const stepone = await mostRecentDocument(CornMapQuery);
-      let steptwo;
-      if (stepone === true) {
-        steptwo = NewDocMaker();
-      } else {
-        steptwo = false;
+  const fetchCountyData = async () => {
+    let mostRecentName = await getDocumentName();
+    
+    if (steptwo === true) {
+      // If a new document was created, fetch the newly created document instead
+      const cmq = query(CornMapCollection, where("id", "==", mostRecentName));
+      const querySnapshot = await getDocs(cmq);
+      if (!querySnapshot.empty) {
+        const recentDocument = querySnapshot.docs[0];
+        mostRecentName = recentDocument.id.toString();
       }
-      // setSteptwo(steptwo);
-      setLoading(false);
-    };
+    
+    const documentRef = doc(CornMapCollection, mostRecentName);
+    
+    try {
+      const documentSnapshot = await getDoc(documentRef);
 
-    const fetchCountyData = async () => {
-      let mostRecentName = await getDocumentName();
-      
-      if (steptwo === true) {
-        // If a new document was created, fetch the newly created document instead
-        const cmq = query(CornMapCollection, where("id", "==", mostRecentName));
-        const querySnapshot = await getDocs(cmq);
-        if (!querySnapshot.empty) {
-          const recentDocument = querySnapshot.docs[0];
-          mostRecentName = recentDocument.id.toString();
+      if (documentSnapshot.exists()) {
+        const countyHarvestsCollectionRef = collection(documentRef, 'CountyHarvests');
+        const countyDataPromises = [];
+
+        for (const county of countiesList) {
+          const countyDocumentRef = doc(countyHarvestsCollectionRef, county);
+          countyDataPromises.push(getDoc(countyDocumentRef));
         }
-      }
-      const documentRef = doc(CornMapCollection, mostRecentName);
 
-      try {
-        const documentSnapshot = await getDoc(documentRef);
+        const countyDataSnapshots = await Promise.all(countyDataPromises);
+        const countyDataFromDocument = {};
 
-        if (documentSnapshot.exists()) {
-          const countyHarvestsCollectionRef = collection(documentRef, 'CountyHarvests');
-          const countyDataPromises = [];
+        countyDataSnapshots.forEach((snapshot, index) => {
+          if (snapshot.exists()) {
+            const { harvestPercent, emergencePercent, plantedPercent } = snapshot.data();
+            const county = countiesList[index];
 
-          for (const county of countiesList) {
-            const countyDocumentRef = doc(countyHarvestsCollectionRef, county);
-            countyDataPromises.push(getDoc(countyDocumentRef));
+            countyDataFromDocument[county] = {
+              harvestPercent,
+              emergencePercent,
+              plantedPercent,
+            };
           }
+        });
 
-          const countyDataSnapshots = await Promise.all(countyDataPromises);
-          const countyDataFromDocument = {};
-
-          countyDataSnapshots.forEach((snapshot, index) => {
-            if (snapshot.exists()) {
-              const { harvestPercent, emergencePercent, plantedPercent } = snapshot.data();
-              const county = countiesList[index];
-
-              countyDataFromDocument[county] = {
-                harvestPercent,
-                emergencePercent,
-                plantedPercent,
-              };
-            }
-          });
-
-          setCountyData(countyDataFromDocument);
-        }
-      } catch (error) {
-        console.error('Error fetching county data:', error);
+        setCountyData(countyDataFromDocument);
       }
-    };
+    } catch (error) {
+      console.error('Error fetching county data:', error);
+    }
+  }else{
+    
 
-    fetchData();
-    fetchCountyData();
-  }, []);
+  }
+  };
+
+  fetchData();
+  fetchCountyData();
+}, []);
+
   
   const getDocumentName = async () => {
     try {
@@ -620,4 +398,3 @@ if (selectedState == "DE") {
 
 
 export default AddHarvest;
-

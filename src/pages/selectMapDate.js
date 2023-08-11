@@ -12,7 +12,7 @@ import { styled } from '@mui/system';
 const options = [
   { label: 'Corn', image: './singlecorn.jpeg', slug: 'corn' },
   { label: 'Wheat', image: './wheat.jpeg', slug: 'wheat' },
-  { label: 'Soy', image: './singlesoybean.jpeg', slug: 'soy' },
+  { label: 'Soy Bean', image: './singlesoybean.jpeg', slug: 'soy' },
 ];
 
 const stateOptions = [

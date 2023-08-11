@@ -9,11 +9,12 @@ const About = () => {
       <div>
         <Typography variant="h4">The Crop Map</Typography>
         <Typography variant="body1">
-          This map was designed as an interface to determine the rates of planting,<br />
-          emergence, and harvesting for the big three crops: wheat, soy, and corn.<br />
-          It's data is regularly updated by Maryland Agriculture Extension agents, and<br />
-          is displayed on the map as a color scale (from white to dark red), displaying<br />
-          the percantage of success of each type of crop.
+          This map is an interface designed reflect the rates of planting,<br/>
+          emergence, and harvesting of wheat, soy, and corn. It's data is <br/>
+          regularly updated by Agriculture Extension Eduacators and Specialists,<br/>
+          and is displayed on the map as a color scale (from white to dark red),<br/>
+          projecting the percentage of each type of crop which has reached each
+          stage.<br/>
         </Typography>
       </div>
     </div>

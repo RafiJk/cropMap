@@ -1,3 +1,4 @@
+
 import React from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
@@ -12,7 +13,7 @@ import Footer from './components/Footer';
 const options = [
   { label: 'Corn', image: './singlecorn.jpeg', slug: 'corn' },
   { label: 'Wheat', image: './wheat.jpeg', slug: 'wheat' },
-  { label: 'Soy', image: './singlesoybean.jpeg', slug: 'soy' },
+  { label: 'Soy Bean', image: './singlesoybean.jpeg', slug: 'soy' },
 ];
 
 const MainContainer = styled(Box)({
@@ -111,13 +112,13 @@ const Home = () => {
       <MainContainer>
         <Box position="absolute" textAlign="center" zIndex={1}>
            <AboveImageText>
-            <strong>Welcome To The Crop Map</strong>
+            <strong>Welcome to The Crop Map</strong>
           </AboveImageText>
           {/* <BelowImageText>
             pick a crop to begin
           </BelowImageText> */}
           <ImageBox>
-            <img src={'./pano1.jpeg'} alt="Image" style={{ width: '100%', height: '100%', top: '-150%', objectFit: 'cover' }} />
+            <img src={'./Barley.jpg'} alt="Image" style={{ width: '100%', height: '100%', top: '-150%', objectFit: 'cover' }} />
             <ContentBox>
             {/* <h1>Welcome to the Map</h1>
             <h4>Search below to view</h4> */}
@@ -171,88 +172,156 @@ const Home = () => {
 
 export default Home;
 
-// import { useEffect, useState } from "react";
-// import { useRouter } from "next/router";
-// import styles from '/Users/rjkigner/projects/pest-map/src/pages/index.module.css';
-// import Downshift from 'downshift';
 
-// const crops = ["wheat", "corn", "soybean"];
+// import * as React from 'react';
+// import Avatar from '@mui/material/Avatar';
+// import Button from '@mui/material/Button';
+// import CssBaseline from '@mui/material/CssBaseline';
+// import TextField from '@mui/material/TextField';
+// import FormControlLabel from '@mui/material/FormControlLabel';
+// import Autocomplete from '@mui/material/Autocomplete';
+// import Checkbox from '@mui/material/Checkbox';
+// import Link from '@mui/material/Link';
+// import Paper from '@mui/material/Paper';
+// import Box from '@mui/material/Box';
+// import Grid from '@mui/material/Grid';
+// import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+// import Typography from '@mui/material/Typography';
+// import { createTheme, ThemeProvider } from '@mui/material/styles';
+// import Header from './components/Header';
+// import Footer from './components/Footer';
+// import { useRouter } from 'next/router';
 
-// const HomePage = () => {
-//   const [searchTerm, setSearchTerm] = useState("");
-//   const router = useRouter();
 
-//   useEffect(() => {
-//     const handleKeyDown = (event) => {
-//       if (event.key === "Enter") {
-//         router.push(`/crop/${searchTerm.toLowerCase()}`);
-//       }
-//     };
 
-//     document.addEventListener("keydown", handleKeyDown);
 
-//     return () => {
-//       document.removeEventListener("keydown", handleKeyDown);
-//     };
-//   }, [searchTerm, router]);
+
+// // TODO remove, this demo shouldn't need to reset the theme.
+
+// const defaultTheme = createTheme();
+
+
+// const options = [
+//   { label: 'Corn', image: './singlecorn.jpeg', slug: 'corn' },
+//   { label: 'Wheat', image: './wheat.jpeg', slug: 'wheat' },
+//   { label: 'Soy', image: './singlesoybean.jpeg', slug: 'soy' },
+// ];
+
+// export default function SignInSide() {
+//   const handleSubmit = (event) => {
+//     event.preventDefault();
+//     const data = new FormData(event.currentTarget);
+//     console.log({
+//       email: data.get('email'),
+//       password: data.get('password'),
+//     });
+//   };
+
+//   const handleOptionChange = (event, value) => {
+//     if (value) {
+//       router.push(`/crop/${value.slug}`);
+//     }
+//   };
+
+//   const handleInputChange = (event) => {
+//     const inputValue = event.target.value.toLowerCase();
+//     if (inputValue === 'wheat' || inputValue === 'corn' || inputValue === 'soy') {
+//       router.push(`/crop/${inputValue}`);
+//     }
+//   };
+
+//   const handleGoClick = () => {
+//     // You can add your logic here when the "Go" button is clicked
+//     // For example, if you need to handle some action or navigate to a specific page.
+//   };
 
 //   return (
-//     <div className={styles.container}>
-//       <div className={styles.header}>
-//         <div className={styles.logo}>
-//           <div className={styles.sublogo}>powered by</div>Phritzda
-//         </div>
-//         <div className={styles.links}>
-//           <button
-//             className={styles.tabButton}
-//             onClick={() => router.push("/addMapDate")}
+//     <ThemeProvider theme={defaultTheme}>
+//       <Header></Header>
+//       <Grid container component="main" sx={{ height: '100vh' }}>
+//        <CssBaseline />
+
+//         <Grid item xs={false} sm={4} md={7} component={Paper} elevation={6} square>
+//           <Box
+//             sx={{
+//               my: 1,
+//               mx: 17,
+//               display: 'flex',
+//               flexDirection: 'column',
+//               justifyContent: 'center',
+//               alignItems: 'center',
+//             }}
 //           >
-//             Update Harvest
-//           </button>
-//         </div>
-//       </div>
-//       <div className={styles.content}>
-//         <h1 className={styles.title}>Crop Map</h1>
-//         <Downshift
-//           selectedItem={searchTerm}
-//           onChange={setSearchTerm}
-//           itemToString={item => (item ? item : '')}
-//         >
-//           {({
-//             getInputProps,
-//             getItemProps,
-//             getMenuProps,
-//             isOpen,
-//             inputValue,
-//             highlightedIndex,
-//           }) => (
-//             <div className={styles.searchInput}>
-//               <input {...getInputProps({ placeholder: "Search Wheat, Soybean, or Corn" })} />
-//               <ul {...getMenuProps()}>
-//                 {isOpen
-//                   ? crops
-//                       .filter(item => !inputValue || item.includes(inputValue))
-//                       .map((item, index) => (
-//                         <li
-//                           {...getItemProps({ key: item, index, item })}
-//                           style={{
-//                             backgroundColor: highlightedIndex === index ? 'lightgray' : 'white',
-//                             fontWeight: highlightedIndex === index ? 'bold' : 'normal',
-//                           }}
-//                         >
-//                           {item}
-//                         </li>
-//                       ))
-//                   : null}
-//               </ul>
-//             </div>
-//           )}
-//         </Downshift>
-//       </div>
-//     </div>
+//             <Typography component="h1" variant="h5">
+//               Welcome To The Crop Map
+//             </Typography>
+//             <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt:28 }}>
+//             <Autocomplete
+//               id="combo-box-demo"
+//               options={options}
+//               getOptionLabel={(option) => option.label}
+//               renderOption={(props, option) => (
+//                 <Box
+//                   sx={{
+//                     display: 'flex',
+//                     alignItems: 'center',
+//                     cursor: 'pointer',
+//                   }}
+//                   onClick={() => {
+//                     router.push(`/crop/${option.label}`);
+//                   }}
+//                 >
+//                   <img src={option.image} alt={option.label} style={{ marginRight: 8, width: 40, height: 40 }} />
+//                   {option.label}
+//                 </Box>
+//               )}
+//               style={{ width: 300 }}
+//               renderInput={(params) => (
+//                 <TextField
+//                   {...params}
+//                   label="Search a Map: wheat, corn, or soy"
+//                   variant="outlined"
+//                   onChange={handleInputChange}
+//                 />
+//               )}
+//               onChange={handleOptionChange}
+              
+//             />
+//              <Button
+//                   variant="contained"
+//                   onClick={handleGoClick}
+//                   style={{ marginTop: '20px', color: '#ffffff', borderColor: '#ffffff' }}
+//                 >
+//                   Go
+//                 </Button>
+         
+//               <Grid container>
+//                 <Grid item>
+              
+//                 </Grid>
+//                 <Grid item>
+//                 </Grid>
+//               </Grid>
+//               {/* <Copyright sx={{ mt: 5 }} /> */}
+//             </Box>
+//           </Box>
+//         </Grid>
+//         <Grid
+//           item
+//           xs={false}
+//           sm={8}
+//           md={5}
+//           sx={{
+//             backgroundImage: `url('/Barley.jpg')`, // Use the correct path to your image
+//             backgroundRepeat: 'no-repeat',
+//             backgroundColor: (t) =>
+//               t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
+//             backgroundSize: 'cover',
+//             backgroundPosition: 'center',
+//           }}
+//         />
+//       </Grid>
+//       <Footer></Footer>
+//     </ThemeProvider>
 //   );
-// };
-
-// export default HomePage;
-
- 
+// }

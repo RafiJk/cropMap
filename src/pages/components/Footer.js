@@ -9,7 +9,7 @@ import { Link as MuiLink } from '@mui/material';
 
 const Footer = () => {
   return (
-    <AppBar position="static" color="primary" style={{ top: 'auto', bottom: 0 }}>
+    <AppBar position="fixed" color="primary" style={{ top: 'auto', bottom: 0, width: '100%' }}>
       <Toolbar>
       </Toolbar>
     </AppBar>
