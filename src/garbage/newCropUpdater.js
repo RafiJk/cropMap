@@ -5,9 +5,9 @@ import { QuerySnapshot, getDoc } from 'firebase/firestore';
 import { getFirestore, collection, updateDoc, setDoc, doc, onSnapshot, Timestamp, query, orderBy, limit,  getDocs} from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { useRouter } from 'next/router';
-import { countiesListDE, countiesListMD, countiesListPA, countiesListVA, countiesListWV } from "./countiesList";
+import { countiesListDE, countiesListMD, countiesListPA, countiesListVA, countiesListWV } from "../pages/addMapDates/countiesList";
 // import { Header } from "antd/es/layout/layout";
-import Header from './components/Header';
+import Header from '../pages/components/Header';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD-LpxW3J2ztr1Q1cE_x8pPHv7JRNa4M9g",

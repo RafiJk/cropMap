@@ -3,7 +3,7 @@ import { getDoc } from 'firebase/firestore';
 import { getFirestore, collection, updateDoc, setDoc, doc, Timestamp, query, orderBy, limit,  getDocs} from "firebase/firestore";
 import { initializeApp } from "firebase/app";
 import { useRouter } from 'next/router';
-import Header from './components/Header';
+import Header from '../components/Header';
 import Link from 'next/link';
 import styles from './addMapDate.module.css';
 

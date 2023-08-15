@@ -95,7 +95,7 @@ const Home = () => {
   const handleGoClick = () => {
     if (selectedState && selectedCrop && selectedPercentType) {
       router.push({
-        pathname: `/add${selectedCrop.slug}MapDate`,
+        pathname: `addMapDates/add${selectedCrop.slug}MapDate`,
         query: {
           state: selectedState.value,
           crop: selectedCrop.slug,

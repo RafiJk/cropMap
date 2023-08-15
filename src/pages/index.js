@@ -90,14 +90,14 @@ const Home = () => {
 
   const handleOptionChange = (event, value) => {
     if (value) {
-      router.push(`/crop/${value.slug}`);
+      router.push(`/cropMap/${value.slug}`);
     }
   };
 
   const handleInputChange = (event) => {
     const inputValue = event.target.value.toLowerCase();
     if (inputValue === 'wheat' || inputValue === 'corn' || inputValue === 'soy') {
-      router.push(`/crop/${inputValue}`);
+      router.push(`/cropMap/${inputValue}`);
     }
   };
 
@@ -134,7 +134,7 @@ const Home = () => {
                     cursor: 'pointer',
                   }}
                   onClick={() => {
-                    router.push(`/crop/${option.label}`);
+                    router.push(`/cropMap/${option.label}`);
                   }}
                 >
                   <img src={option.image} alt={option.label} style={{ marginRight: 8, width: 40, height: 40 }} />

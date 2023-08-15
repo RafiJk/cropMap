@@ -23,7 +23,7 @@ const Header = () => {
         <Link href="/selectMapDate">
           <Button color="inherit" style={{ backgroundColor: 'transparent', color: 'white' }}>Update Harvest</Button>
         </Link>
-          <Link href='./about'>
+          <Link href='/about'>
           <Button color="inherit" style={{ backgroundColor: 'transparent', color: 'white' }}>About</Button> 
         </Link>
         {!isHomePage && (
