@@ -1,4 +1,7 @@
-//B"SD
+
+/* BSD
+- NEED TO PREVENT ALL NON ADMINS/AND NON LOGGED IN FROM GETTING IN 
+*/
 
 import React, { useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -105,6 +108,10 @@ const Home = () => {
     }
   };
 
+  const goToVerifyPage = () =>{
+    router.push('/verifyAccounts')
+  }
+
 
 
   return (
@@ -194,6 +201,7 @@ const Home = () => {
                 Go
               </Button>
             ) : null}
+            <button onClick={goToVerifyPage}>Verifier</button>
           </ContentBox>
         </Box>
       </MainContainer>

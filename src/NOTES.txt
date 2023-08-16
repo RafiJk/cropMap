@@ -9,3 +9,11 @@ https://raw.githubusercontent.com/deldersveld/topojson/master/countries/us-state
 everythign currentluy times .6 and then times .8 times .8 again
 
 am i going ot need a way to change to read from api not csv
+
+SO MY NEW PAGE GETS ALL PEOPLE FROM THE MAP WITH VERIFID STATUS OF FALSE AND DISPLAYES
+CREDENTIALS I CAN CLICK OT ACCEPT, THEY GET AN EMAIL AND VERIFIED STATUS CHECKS, I WILL 
+NEED OT MAKE CHAGNES TO LOGIN AND TO
+
+- ALSO NEED TO BE ABLE TO SELECT multiple
+-ALSO FINALLY AND MUST IMPORTANTLY
+- JUST FUNNEL TO REGULAR selectMap date, but no select state option update and copy all

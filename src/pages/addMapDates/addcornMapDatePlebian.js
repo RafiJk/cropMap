@@ -1,10 +1,13 @@
+
 //BSD
 //OK LET'S MAKE THIS SECURE
 
 import React, { useState, useEffect } from 'react';
 import { getFirestore, collection, query, limit, orderBy, doc, setDoc, updateDoc, getDocs, getDoc } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
-import { auth, db } from './firebaseConfig.js'; // 
+import { auth, db } from './firebaseConfig.js'; //
+import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Correct import
+// import mapChart from './mapChart';
 
 
 import { useRouter } from 'next/router';
@@ -14,10 +17,10 @@ import {
   countiesListPA,
   countiesListVA,
   countiesListWV,
-} from './countiesList';
+} from './countiesList.js';
 
-import Header from '../components/Header';
-import LogIn from './LogUp.js'; // I Dont know why it has an error with login but it does so it's logUp now...sue me
+import Header from '../components/Header.js';
+import LogIn from '../LogUp.js'; // I Dont know why it has an error with login but it does so it's logUp now...sue me
 import SignUp from './SignUp.js'; // 
 
 
@@ -35,18 +38,15 @@ const Updater = () => {
   const [user, setUser] = useState(null); // Store user information
   const [countyData, setCountyData] = useState({});
   const [selectedCounty, setSelectedCounty] = useState(null);
-  const [userSelectedCounties, setUserSelectedCounties] = useState([]);
   const [isUpdating, setIsUpdating] = useState(false);
+  const [userSelectedCounties, setUserSelectedCounties] = useState([]);
 
 
   const router = useRouter();
   const selectedState = router.query.state || null;
   const selectedCrop = router.query.crop || null;
   const selectedPercentType = router.query.percentType || null;
-
-  console.log(selectedState);
-
-  const countiesList = countiesByState[selectedState] || countiesListMD;
+  const countiesList = userSelectedCounties || [];
   let url = stateUrlMap[selectedState] || '';
 
   useEffect(() => {
@@ -65,6 +65,7 @@ const Updater = () => {
           console.log('here goof')
           makeNewDoc();
         }else{
+          console.log('here bad')
           fetchCountyData();
         }
       } catch (error) {
@@ -129,7 +130,9 @@ const Updater = () => {
         console.error('Error fetching county data:', error);
       }
     };    
-    const unsubscribe = auth.onAuthStateChanged(async (authUser) => {
+    const auth = getAuth();
+
+    const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
       setUser(authUser);
       if (authUser) {
         try {
@@ -138,30 +141,25 @@ const Updater = () => {
 
           if (userDocSnapshot.exists()) {
             const userData = userDocSnapshot.data();
-            const userSelectedCounties = userData.selectedCounties || [];
-            fetchDoc();
-      }
+            const selectedCounties = userData.selectedCounties || [];
+            setUserSelectedCounties(selectedCounties);
+            fetchCountyData();
+          }
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
       }
     });
-  
+
     return () => {
-      unsubscribe(); // Clean up?
-  
-      // Autosign out user when leave the page
-      auth.signOut()
-        .then(() => {
-          console.log('User signed out upon leaving the page.');
-        })
-        .catch((error) => {
-          console.error('Error signing out:', error);
-        });
+      unsubscribe();
     };
-  }, []); // Empty dependency array to ensure this effect only runs on component unmount
-  
- 
+  }, []);
+
+  // Other methods and JSX...
+
+
+
 
   const updateHarvest = async (county) => {
 
@@ -213,24 +211,25 @@ const Updater = () => {
     }));
   };
 
+
   return (
     <div>
       <Header> </Header>
-      {user ? (
+      {user ? ( // If the user gets authent
         <>
-        <select
-          name="counties"
-          id="selectedCounty"
-          value={selectedCounty}
-          onChange={(e) => setSelectedCounty(e.target.value)}
-        >
-          <option value="">Select a county</option>
-          {userSelectedCounties.map((county, index) => (
-            <option key={index} value={county}>
-              {county}
-            </option>
-          ))}
-        </select>
+      <select
+        name="counties"
+        id="selectedCounty"
+        value={selectedCounty}
+        onChange={(e) => setSelectedCounty(e.target.value)}
+      >
+        <option value="">Select a county</option>
+        {countiesList.map((county, index) => (
+          <option key={index} value={county}>
+            {county}
+          </option>
+        ))}
+      </select>
       <div>
       {selectedCounty && (
          <div className="the Input Bar!">
@@ -254,6 +253,7 @@ const Updater = () => {
       {/* <button type="Return To Home" onClick={router.push("/")} >
         Return To Home
       </button> */}
+      {/* <mapChart></mapChart> */}
       </div>
         </>
       ) : (
@@ -268,6 +268,3 @@ const Updater = () => {
 };
 
 export default Updater;
-
-
-

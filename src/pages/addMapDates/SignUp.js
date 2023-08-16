@@ -7,6 +7,7 @@
 import React, { useState } from 'react';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { doc, setDoc, collection, getDocs, getFirestore } from 'firebase/firestore';
+import Header from '../components/Header';
 import { initializeApp } from 'firebase/app';
 import { getAuth } from 'firebase/auth';
 import 'firebase/auth';
@@ -18,6 +19,7 @@ import {
   countiesListVA,
   countiesListWV,
 } from './countiesList'
+import { Router } from 'react-router';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD-LpxW3J2ztr1Q1cE_x8pPHv7JRNa4M9g",
@@ -58,7 +60,10 @@ const SignUp = () => {
       // Store additional user data in Firestore
       const userData = {
         email: email,
-        thing: "hello world",
+        Admin: false,
+        credentials: "I like Ice Cream",
+        Instuition: "UMD",
+        verified: false,
         selectedState: selectedState,
         selectedCounties: selectedCounties,
         // Other additional fields
@@ -66,6 +71,7 @@ const SignUp = () => {
 
       // Store the data in the myUsers collection
       await setDoc(doc(db, "myUsers", userCredential.user.uid), userData);
+      Router.push("/");
 
       // Redirect to another page or perform other actions on successful sign-up
     } catch (error) {
@@ -75,6 +81,7 @@ const SignUp = () => {
 
   return (
     <div>
+      <Header></Header>
       <h2>Sign Up</h2>
       <input
         type="email"
