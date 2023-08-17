@@ -3,7 +3,7 @@
 //OK LET'S MAKE THIS SECURE
 
 import React, { useState, useEffect } from 'react';
-import { getFirestore, collection, query, limit, orderBy, doc, setDoc, updateDoc, getDocs, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, query, limit, orderBy, doc, Timestamp, setDoc, updateDoc, getDocs, getDoc } from 'firebase/firestore';
 import { initializeApp } from 'firebase/app';
 import { auth, db } from './firebaseConfig.js'; //
 import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Correct import
@@ -32,28 +32,37 @@ const countiesByState = {"DE": countiesListDE, "MD": countiesListMD, "WV": count
   "VA": countiesListVA, "PA": countiesListPA
 };
 
-const CornMapCollection = collection(db, "CornMap");
+
+
 
 const Updater = () => {
+
+
   const router = useRouter();
+  const selectedState = router.query.state || null;
+  const selectedCrop = router.query.crop || null;
+  const selectedPercentType = router.query.percentType || 0;
+  console.log(selectedPercentType);
+  const cropMapCollection = collection(db, (`${selectedCrop}Map`).toString());
+
   const [user, setUser] = useState(null); // Store user information
   const [countyData, setCountyData] = useState({});
   const [selectedCounty, setSelectedCounty] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
   const [userSelectedCounties, setUserSelectedCounties] = useState([]);
-  const selectedPercentType = router.query.percentType || null;
 
 
-
-  const selectedState = router.query.state || null;
+ 
   const countiesList = userSelectedCounties || [];
   let url = stateUrlMap[selectedState] || '';
+
+ 
 
   useEffect(() => {
     // Subscription to listen for authentication state changes
 
     const fetchDoc = async () => { //might not want asynch??
-      const cmq = query(CornMapCollection, orderBy("date", "desc"), limit(1)) //get most recent doc
+      const cmq = query(cropMapCollection, orderBy("date", "desc"), limit(1)) //get most recent doc
       try { 
         const querySnapshot = await getDocs(cmq);
         const snapshot = querySnapshot.docs[0];
@@ -74,7 +83,7 @@ const Updater = () => {
     };
 
     const makeNewDoc = () => { //access collection and iterate through and create it in form
-      const newMapDocRef = doc(collection(db, "CornMap")); 
+      const newMapDocRef = doc(collection(db,(`${selectedCrop}Map`).toString())); 
       setDoc(newMapDocRef, { date: Timestamp.now() }).then(() => {
         const countyHarvestsCollectionRef = collection(newMapDocRef, 'CountyHarvests');
         for (const state in countiesByState) {
@@ -98,10 +107,10 @@ const Updater = () => {
       if (!user) {
         return; // If user is not signed in, exit the function
       }
-      const cmq = query(CornMapCollection, orderBy('date', 'desc'), limit(1));
+      const cmq = query(cropMapCollection, orderBy('date', 'desc'), limit(1));
       const querySnapshot = await getDocs(cmq);
       const mostRecentDocumentName = querySnapshot.docs[0].id.toString();
-      const documentRef = doc(CornMapCollection, mostRecentDocumentName);
+      const documentRef = doc(cropMapCollection, mostRecentDocumentName);
       try {
         const documentSnapshot = await getDoc(documentRef);
         if (documentSnapshot.exists()) {
@@ -143,7 +152,7 @@ const Updater = () => {
             const userData = userDocSnapshot.data();
             const selectedCounties = userData.selectedCounties || [];
             setUserSelectedCounties(selectedCounties);
-            fetchCountyData();
+            fetchDoc();
           }
         } catch (error) {
           console.error('Error fetching user data:', error);
@@ -162,11 +171,12 @@ const Updater = () => {
 
 
   const updateHarvest = async (county) => {
+    const cropMapCollection = collection(db, (`${selectedCrop}Map`).toString());
 
-    const querySnapshot = await getDocs(query(CornMapCollection, orderBy("date", "desc"), limit(1)));
+    const querySnapshot = await getDocs(query(cropMapCollection, orderBy("date", "desc"), limit(1)));
     const mostRecentName = querySnapshot.docs[0].id.toString();
 
-    const documentRef = doc(CornMapCollection, mostRecentName);
+    const documentRef = doc(cropMapCollection, mostRecentName);
     const countyDocumentRef = doc(collection(documentRef, 'CountyHarvests'), county);
 
     try {
@@ -184,17 +194,15 @@ const Updater = () => {
   };
 
 
-
-
-  const handleUpdateClick = async () => {
-    for (const county of countiesList) {
+  const handleUpdateClick = async () => { //literally the title
+    for (const county of countiesList){ 
       setIsUpdating(true);
-      await updateHarvest(county, selectedPercentType); // Pass selectedPercentType here
+      await updateHarvest(county);
       setIsUpdating(false);
     }
   };
   
-  const handleInputChange = (event, county, type) => {
+  const handleInputChange = (event, county) => { //takes in user input, i put some limits too
     const { name, value } = event.target;
     let newValue = Number(value);
   
@@ -203,16 +211,15 @@ const Updater = () => {
     } else if (newValue > 100) {
       newValue = 100;
     }
-  
+
     setCountyData((prevData) => ({
       ...prevData,
       [county]: {
         ...prevData[county],
-        [type]: newValue, // Use selectedPercentType here
+        [name]: newValue,
       },
     }));
   };
-  
 
 
   return (
@@ -233,60 +240,27 @@ const Updater = () => {
           </option>
         ))}
       </select>
-      {selectedCounty && (
-         <div className="the planted Input Bar!">
-         <label>planted Percent:</label>
-         <input
-            type="number"
-            name="plantedPercent"
-            value={Math.ceil(countyData[selectedCounty]?.plantedPercent || 0)} // Round to ceiling
-            min="0"
-            max="100"
-            onChange={(event) => handleInputChange(event, selectedCounty, "plantedPercent")}
-            // onKeyPress={(event) => handleKeyPress(event, selectedCounty)}
-          />
-         <span className="the text in the input bar">
-           Current Percent: {countyData[selectedCounty]?.plantedPercent || 0}%
-         </span>
-       </div>
-      )}
-      {selectedCounty && (
-         <div className="the Input Bar!">
-         <label>emergencePercent:</label>
-         <input
-            type="number"
-            name="emergencePercent"
-            value={Math.ceil(countyData[selectedCounty]?.emergencePercent || 0)} // Round to ceiling
-            min="0"
-            max="100"
-            onChange={(event) => handleInputChange(event, selectedCounty, "emergencePercent")}
-            // onKeyPress={(event) => handleKeyPress(event, selectedCounty)}
-          />
-         <span className="the text in the input bar">
-           Current Percent: {countyData[selectedCounty]?.emergencePercent || 0}%
-         </span>
-       </div>
-      )}
+      <div>
       {selectedCounty && (
          <div className="the Input Bar!">
          <label>Harvest Percent:</label>
          <input
             type="number"
-            name="harvestPercent"
-            value={Math.ceil(countyData[selectedCounty]?.harvestPercent || 0)} // Round to ceiling
+            name="selectedPercentType"
+            value={Math.ceil(countyData[selectedCounty]?.harvestPercent || 0)} // Round up cause like if 79 it's 80 and everythign else is the same
             min="0"
             max="100"
-            onChange={(event) => handleInputChange(event, selectedCounty, "harvestPercent")}
-            // onKeyPress={(event) => handleKeyPress(event, selectedCounty)}
+            onChange={(event) => handleInputChange(event, selectedCounty)}
           />
          <span className="the text in the input bar">
-           Current Percent: {countyData[selectedCounty]?.harvestPercent || 0}%
+           Current Percent: {countyData[selectedCounty]?.harvestPercent|| 0}%
          </span>
-       </div>
-      )}
+         </div>
+        )}
       <button onClick={() => handleUpdateClick()} disabled={isUpdating}>
         {isUpdating ? 'Updating...' : 'Update Harvest Percent'}
       </button>
+      </div>
         </>
       ) : (
         // If the user is not authenticated, show sign-up and log-in components

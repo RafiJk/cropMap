@@ -1,29 +1,28 @@
-
 //BSD
 //OK LET'S MAKE THIS SECURE
 
-import React, { useState, useEffect } from 'react';
-import { getFirestore, collection, query, limit, orderBy, doc, setDoc, updateDoc, getDocs, getDoc } from 'firebase/firestore';
-import { initializeApp } from 'firebase/app';
-import { auth, db } from './firebaseConfig.js'; //
-import { getAuth, onAuthStateChanged } from 'firebase/auth'; // Correct import
-// import mapChart from './mapChart';
-
-
+/* BSD
+- NEED TO PREVENT ALL NON ADMINS/AND NON LOGGED IN FROM GETTING IN 
+*/
+import React, { useState, useEffect } from "react";
+import { QuerySnapshot, getDoc } from 'firebase/firestore';
+import { getFirestore, collection, updateDoc, setDoc, doc, onSnapshot, Timestamp, query, orderBy, limit,  getDocs} from "firebase/firestore";
+import { initializeApp } from "firebase/app";
 import { useRouter } from 'next/router';
-import {
-  countiesListDE,
-  countiesListMD,
-  countiesListPA,
-  countiesListVA,
-  countiesListWV,
-} from './countiesList.js';
+import { countiesListDE, countiesListMD, countiesListPA, countiesListVA, countiesListWV } from "./countiesList";
 
-import Header from '../components/Header.js';
-import LogIn from '../LogUp.js'; // I Dont know why it has an error with login but it does so it's logUp now...sue me
-import SignUp from './SignUp.js'; // 
+import Header from '../components/Header';
 
-
+const firebaseConfig = {
+  apiKey: "AIzaSyD-LpxW3J2ztr1Q1cE_x8pPHv7JRNa4M9g",
+  authDomain: "ag-map-d4af3.firebaseapp.com",
+  projectId: "ag-map-d4af3",
+  storageBucket: "ag-map-d4af3.appspot.com",
+  messagingSenderId: "574258608297",
+  appId: "1:574258608297:web:4dc19cc58b6aff298dd1b8"
+};
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 const stateUrlMap = {"DE": "/theRealStateOfDE.json", "MD": "/theRealStateOfMD.json",
  "WV": "/theRealStateOfWV.json", "VA": "/theRealStateOfVA.json", "PA": "/theRealStateOfPA.json" };
@@ -32,28 +31,26 @@ const countiesByState = {"DE": countiesListDE, "MD": countiesListMD, "WV": count
   "VA": countiesListVA, "PA": countiesListPA
 };
 
-const CornMapCollection = collection(db, "CornMap");
+const SMapCollection = collection(db, "SMap");
 
-const Updater = () => {
-  const router = useRouter();
-  const [user, setUser] = useState(null); // Store user information
+const updater = () => {
+
   const [countyData, setCountyData] = useState({});
   const [selectedCounty, setSelectedCounty] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [userSelectedCounties, setUserSelectedCounties] = useState([]);
+
+  const router = useRouter(); //this gets you the specifics we're working down...this is going to be based off user prob
+  const selectedState = router.query.state || null;
+  const selectedCrop = router.query.crop || null;
   const selectedPercentType = router.query.percentType || null;
 
-
-
-  const selectedState = router.query.state || null;
-  const countiesList = userSelectedCounties || [];
-  let url = stateUrlMap[selectedState] || '';
+  const countiesList = countiesByState[selectedState] || countiesListMD;
+  let url = stateUrlMap[selectedState] || null;
 
   useEffect(() => {
-    // Subscription to listen for authentication state changes
 
     const fetchDoc = async () => { //might not want asynch??
-      const cmq = query(CornMapCollection, orderBy("date", "desc"), limit(1)) //get most recent doc
+      const cmq = query(SMapCollection, orderBy("date", "desc"), limit(1)) //get most recent doc
       try { 
         const querySnapshot = await getDocs(cmq);
         const snapshot = querySnapshot.docs[0];
@@ -74,8 +71,8 @@ const Updater = () => {
     };
 
     const makeNewDoc = () => { //access collection and iterate through and create it in form
-      const newMapDocRef = doc(collection(db, "CornMap")); 
-      setDoc(newMapDocRef, { date: Timestamp.now() }).then(() => {
+      const newMapDocRef = doc(collection(db, "SMap")); // I think I can cut off a line of code here...if glitches change back
+      setDoc(newMapDocRef, { date: Timestamp.now() }).then(() => {//if glitch change back to newMapDOCREF and uncomunt line above
         const countyHarvestsCollectionRef = collection(newMapDocRef, 'CountyHarvests');
         for (const state in countiesByState) {
           const stateCounties = countiesByState[state];
@@ -91,23 +88,26 @@ const Updater = () => {
           }
         }
       })
+      console.log('if you got here...')
       fetchCountyData();
     }
 
     const fetchCountyData = async () => {
-      if (!user) {
-        return; // If user is not signed in, exit the function
-      }
-      const cmq = query(CornMapCollection, orderBy('date', 'desc'), limit(1));
+
+      //next four lines annoying but neccesary...
+      //seems I need two calls to get data 1) to get the most recent documetn name
+      // 2) use the name to get the id...there may be a more efficient way but idk it rn
+      const cmq = query(SMapCollection, orderBy("date", "desc"), limit(1)); //get the name of the neweset doc 
       const querySnapshot = await getDocs(cmq);
-      const mostRecentDocumentName = querySnapshot.docs[0].id.toString();
-      const documentRef = doc(CornMapCollection, mostRecentDocumentName);
+      const mostRecentDocumentName = querySnapshot.docs[0].id.toString(); 
+      const documentRef = doc(SMapCollection, mostRecentDocumentName); //checl to make sure getting right one
+      
       try {
-        const documentSnapshot = await getDoc(documentRef);
+        const documentSnapshot = await getDoc(documentRef); // I feel like i get it more times then needed
         if (documentSnapshot.exists()) {
           const countyHarvestsCollectionRef = collection(documentRef, 'CountyHarvests');
           const countyDataPromises = [];
-          for (const county of selectedCounties) { // Fetch data for selectedCounties
+          for (const county of countiesList) {
             const countyDocumentRef = doc(countyHarvestsCollectionRef, county);
             countyDataPromises.push(getDoc(countyDocumentRef));
           }
@@ -116,7 +116,7 @@ const Updater = () => {
           countyDataSnapshots.forEach((snapshot, index) => {
             if (snapshot.exists()) {
               const { harvestPercent, emergencePercent, plantedPercent } = snapshot.data();
-              const county = selectedCounties[index];
+              const county = countiesList[index];
               countyDataFromDocument[county] = {
                 harvestPercent,
                 emergencePercent,
@@ -129,44 +129,17 @@ const Updater = () => {
       } catch (error) {
         console.error('Error fetching county data:', error);
       }
-    };    
-    const auth = getAuth();
-
-    const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
-      setUser(authUser);
-      if (authUser) {
-        try {
-          const userDocRef = doc(db, 'myUsers', authUser.uid);
-          const userDocSnapshot = await getDoc(userDocRef);
-
-          if (userDocSnapshot.exists()) {
-            const userData = userDocSnapshot.data();
-            const selectedCounties = userData.selectedCounties || [];
-            setUserSelectedCounties(selectedCounties);
-            fetchCountyData();
-          }
-        } catch (error) {
-          console.error('Error fetching user data:', error);
-        }
-      }
-    });
-
-    return () => {
-      unsubscribe();
-    };
+    }
+    fetchDoc(); //checks if need new doc
   }, []);
-
-  // Other methods and JSX...
-
-
 
 
   const updateHarvest = async (county) => {
 
-    const querySnapshot = await getDocs(query(CornMapCollection, orderBy("date", "desc"), limit(1)));
+    const querySnapshot = await getDocs(query(SMapCollection, orderBy("date", "desc"), limit(1)));
     const mostRecentName = querySnapshot.docs[0].id.toString();
 
-    const documentRef = doc(CornMapCollection, mostRecentName);
+    const documentRef = doc(SMapCollection, mostRecentName);
     const countyDocumentRef = doc(collection(documentRef, 'CountyHarvests'), county);
 
     try {
@@ -182,8 +155,6 @@ const Updater = () => {
       console.error('Error updating harvest percent:', error);
     }
   };
-
-
 
 
   const handleUpdateClick = async () => {
@@ -217,21 +188,20 @@ const Updater = () => {
 
   return (
     <div>
-      <Header> </Header>
-      {user ? ( // If the user gets authent
-        <>
+      <Header></Header>
       <select
-        name="counties"
-        id="selectedCounty"
+        name='counties'
+        id='selectedCounty'
         value={selectedCounty}
         onChange={(e) => setSelectedCounty(e.target.value)}
       >
-        <option value="">Select a county</option>
+        <option value=''>Select a county</option>
         {countiesList.map((county, index) => (
           <option key={index} value={county}>
             {county}
           </option>
         ))}
+
       </select>
       {selectedCounty && (
          <div className="the planted Input Bar!">
@@ -287,16 +257,11 @@ const Updater = () => {
       <button onClick={() => handleUpdateClick()} disabled={isUpdating}>
         {isUpdating ? 'Updating...' : 'Update Harvest Percent'}
       </button>
-        </>
-      ) : (
-        // If the user is not authenticated, show sign-up and log-in components
-        <>
-          <SignUp />
-          <LogIn />
-        </>
-      )}
+      <button type="Return To Home" onClick={() => router.push("/")} >
+        Return To Home
+      </button>
     </div>
   );
-};
+};  
 
-export default Updater;
+export default updater;

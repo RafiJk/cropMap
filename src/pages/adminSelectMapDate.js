@@ -29,9 +29,9 @@ const stateOptions = [
 ];
 
 const percentTypeOptions = [
-  { label: 'Harvested', value: 'harvestPercent' },
-  { label: 'Emergence', value: 'emergencePercent' },
-  { label: 'Planted', value: 'plantedPercent' },
+  { label: 'Harvested', slug: 'harvestPercent' },
+  { label: 'Emergence', slug: 'emergencePercent' },
+  { label: 'Planted', slug: 'plantedPercent' },
   // Add more state options as needed
 ];
 
@@ -79,9 +79,9 @@ const Subtitle = styled('p')({
 const Home = () => {
   const router = useRouter();
 
-  const [selectedState, setSelectedState] = useState(null);
-  const [selectedCrop, setSelectedCrop] = useState(null);
-  const [selectedPercentType, setSelectedPercentType] = useState(null);
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedCrop, setSelectedCrop] = useState("");
+  const [selectedPercentType, setSelectedPercentType] = useState("");
 
   const handleStateChange = (event, value) => {
     setSelectedState(value);
@@ -98,11 +98,11 @@ const Home = () => {
   const handleGoClick = () => {
     if (selectedState && selectedCrop && selectedPercentType) {
       router.push({
-        pathname: `addMapDates/add${selectedCrop.slug}MapDate`,
+        pathname: `addMapDates/adminadd${selectedCrop.slug}MapDate`,
         query: {
           state: selectedState.value,
           crop: selectedCrop.slug,
-          percentType: selectedPercentType.value,
+          percentType: selectedPercentType.slug,
         },
       });
     }
@@ -142,14 +142,14 @@ const Home = () => {
             </Box>
             <Box width="300px" marginTop="20px">
               <Autocomplete
-                id="percentType-combo-box"
+                id="percent-combo-box"
                 options={percentTypeOptions}
                 getOptionLabel={(option) => option.label}
                 onChange={handlePercentTypeChange}
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Select a Percent Type"
+                    label="Select a Percent"
                     variant="outlined"
                   />
                 )}

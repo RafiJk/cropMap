@@ -11,9 +11,9 @@ import Footer from './components/Footer';
 
 
 const options = [
-  { label: 'Corn', image: './singlecorn.jpeg', slug: 'corn' },
-  { label: 'Wheat', image: './wheat.jpeg', slug: 'wheat' },
-  { label: 'Soy Bean', image: './singlesoybean.jpeg', slug: 'soy' },
+  { label: 'Corn', image: './singlecorn.jpeg', slug: 'Corn' },
+  { label: 'Wheat', image: './wheat.jpeg', slug: 'Wheat' },
+  { label: 'Soy Bean', image: './singlesoybean.jpeg', slug: 'Soy' },
 ];
 
 const MainContainer = styled(Box)({

@@ -49,8 +49,8 @@ const MapChart = () => {
   let { crop } = router.query;
   if (crop) {
     crop = crop.charAt(0).toUpperCase() + crop.slice(1);
-    if (crop === "Soybean") {
-      crop = "Soy";
+    if (crop == "Soy Bean") {
+      crop = "S";
     }
   }
 

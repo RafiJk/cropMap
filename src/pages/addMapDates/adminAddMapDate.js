@@ -42,10 +42,10 @@ const updater = () => {
   const router = useRouter(); //this gets you the specifics we're working down...this is going to be based off user prob
   const selectedState = router.query.state || null;
   const selectedCrop = router.query.crop || null;
-  const selectedPercentType = router.query.percentType || null;
+  const selectedPercentType = router.query.percentType;
 
   const countiesList = countiesByState[selectedState] || countiesListMD;
-  let url = stateUrlMap[selectedState] || null;
+  let url = stateUrlMap[selectedState] || "";
 
   useEffect(() => {
 
@@ -158,14 +158,14 @@ const updater = () => {
 
 
   const handleUpdateClick = async () => {
-    for (const county of countiesList) {
+    for (const county of countiesList){ 
       setIsUpdating(true);
-      await updateHarvest(county, selectedPercentType); // Pass selectedPercentType here
+      await updateHarvest(county);
       setIsUpdating(false);
     }
   };
   
-  const handleInputChange = (event, county, type) => {
+  const handleInputChange = (event, county) => {
     const { name, value } = event.target;
     let newValue = Number(value);
   
@@ -179,7 +179,7 @@ const updater = () => {
       ...prevData,
       [county]: {
         ...prevData[county],
-        [type]: newValue, // Use selectedPercentType here
+        [name]: newValue,
       },
     }));
   };
@@ -204,53 +204,18 @@ const updater = () => {
 
       </select>
       {selectedCounty && (
-         <div className="the planted Input Bar!">
-         <label>planted Percent:</label>
-         <input
-            type="number"
-            name="plantedPercent"
-            value={Math.ceil(countyData[selectedCounty]?.plantedPercent || 0)} // Round to ceiling
-            min="0"
-            max="100"
-            onChange={(event) => handleInputChange(event, selectedCounty, "plantedPercent")}
-            // onKeyPress={(event) => handleKeyPress(event, selectedCounty)}
-          />
-         <span className="the text in the input bar">
-           Current Percent: {countyData[selectedCounty]?.plantedPercent || 0}%
-         </span>
-       </div>
-      )}
-      {selectedCounty && (
-         <div className="the Input Bar!">
-         <label>emergencePercent:</label>
-         <input
-            type="number"
-            name="emergencePercent"
-            value={Math.ceil(countyData[selectedCounty]?.emergencePercent || 0)} // Round to ceiling
-            min="0"
-            max="100"
-            onChange={(event) => handleInputChange(event, selectedCounty, "emergencePercent")}
-            // onKeyPress={(event) => handleKeyPress(event, selectedCounty)}
-          />
-         <span className="the text in the input bar">
-           Current Percent: {countyData[selectedCounty]?.emergencePercent || 0}%
-         </span>
-       </div>
-      )}
-      {selectedCounty && (
          <div className="the Input Bar!">
          <label>Harvest Percent:</label>
          <input
             type="number"
-            name="harvestPercent"
-            value={Math.ceil(countyData[selectedCounty]?.harvestPercent || 0)} // Round to ceiling
+            name="selectedPercentType"
+            value={Math.ceil( countyData[selectedCounty]?.[selectedPercentType])} // Round to ceiling
             min="0"
             max="100"
-            onChange={(event) => handleInputChange(event, selectedCounty, "harvestPercent")}
-            // onKeyPress={(event) => handleKeyPress(event, selectedCounty)}
+            onChange={(event) => handleInputChange(event, selectedCounty)}
           />
          <span className="the text in the input bar">
-           Current Percent: {countyData[selectedCounty]?.harvestPercent || 0}%
+           Current Percent: {countyData[selectedCounty]?.[selectedPercentType]}%
          </span>
        </div>
       )}

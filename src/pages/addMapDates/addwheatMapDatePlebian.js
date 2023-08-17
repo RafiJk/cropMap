@@ -32,7 +32,7 @@ const countiesByState = {"DE": countiesListDE, "MD": countiesListMD, "WV": count
   "VA": countiesListVA, "PA": countiesListPA
 };
 
-const CornMapCollection = collection(db, "CornMap");
+const WheatMapCollection = collection(db, "WheatMap");
 
 const Updater = () => {
   const router = useRouter();
@@ -53,7 +53,7 @@ const Updater = () => {
     // Subscription to listen for authentication state changes
 
     const fetchDoc = async () => { //might not want asynch??
-      const cmq = query(CornMapCollection, orderBy("date", "desc"), limit(1)) //get most recent doc
+      const cmq = query(WheatMapCollection, orderBy("date", "desc"), limit(1)) //get most recent doc
       try { 
         const querySnapshot = await getDocs(cmq);
         const snapshot = querySnapshot.docs[0];
@@ -74,7 +74,7 @@ const Updater = () => {
     };
 
     const makeNewDoc = () => { //access collection and iterate through and create it in form
-      const newMapDocRef = doc(collection(db, "CornMap")); 
+      const newMapDocRef = doc(collection(db, "WheatMap")); 
       setDoc(newMapDocRef, { date: Timestamp.now() }).then(() => {
         const countyHarvestsCollectionRef = collection(newMapDocRef, 'CountyHarvests');
         for (const state in countiesByState) {
@@ -98,10 +98,10 @@ const Updater = () => {
       if (!user) {
         return; // If user is not signed in, exit the function
       }
-      const cmq = query(CornMapCollection, orderBy('date', 'desc'), limit(1));
+      const cmq = query(WheatMapCollection, orderBy('date', 'desc'), limit(1));
       const querySnapshot = await getDocs(cmq);
       const mostRecentDocumentName = querySnapshot.docs[0].id.toString();
-      const documentRef = doc(CornMapCollection, mostRecentDocumentName);
+      const documentRef = doc(WheatMapCollection, mostRecentDocumentName);
       try {
         const documentSnapshot = await getDoc(documentRef);
         if (documentSnapshot.exists()) {
@@ -163,10 +163,10 @@ const Updater = () => {
 
   const updateHarvest = async (county) => {
 
-    const querySnapshot = await getDocs(query(CornMapCollection, orderBy("date", "desc"), limit(1)));
+    const querySnapshot = await getDocs(query(WheatMapCollection, orderBy("date", "desc"), limit(1)));
     const mostRecentName = querySnapshot.docs[0].id.toString();
 
-    const documentRef = doc(CornMapCollection, mostRecentName);
+    const documentRef = doc(WheatMapCollection, mostRecentName);
     const countyDocumentRef = doc(collection(documentRef, 'CountyHarvests'), county);
 
     try {
