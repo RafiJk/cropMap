@@ -17,8 +17,8 @@ import {
 } from './countiesList';
 
 import Header from '../components/Header';
-import LogIn from '../../../public/loginStuff/LogUp.js'; // I Dont know why it has an error with login but it does so it's logUp now...sue me
-import SignUp from '../../../public/loginStuff/SignUp.js'; // 
+import { LogIn } from '../../src/pages/Auth/LogInComponent.js'; // I Dont know why it has an error with login but it does so it's logUp now...sue me
+import { SignUp } from '../../src/pages/Auth/SignUpComponent.js'; 
 
 
 

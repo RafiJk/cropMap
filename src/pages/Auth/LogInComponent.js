@@ -1,12 +1,16 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from './addMapDates/firebaseConfig.js'; // Import your Firebase auth and firestore instances
+import { auth, db } from '../../firebase'; // Import your Firebase auth and firestore instances
 import { useRouter } from 'next/router';
 import { doc, getDoc } from 'firebase/firestore'; // Import the necessary firestore functions
-import Header from './components/Header';
+import { useUpdater } from '../../userContext';
 
 const LogIn = () => {
   const router = useRouter();
+  const {
+    setAdmin,
+    setVerified,
+  } = useUpdater();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -14,25 +18,24 @@ const LogIn = () => {
     try {
       await signInWithEmailAndPassword(auth, email, password);
 
-      // Get user data from Firestore
       const userDocRef = doc(db, 'myUsers', auth.currentUser.uid);
       const userDocSnapshot = await getDoc(userDocRef);
 
       if (userDocSnapshot.exists()) {
         const userData = userDocSnapshot.data();
-        const isAdmin = userData.Admin || false;
+        const isAdmin = userData.Admin? true : false;
         const isVerified = userData.verified;
+        setAdmin(isAdmin); 
+        setVerified(isVerified);
 
         // Redirect based on admin status
-        if (isAdmin) {
-          router.push('/adminSelectMapDate'); // Replace with your admin page route
-          //make sure only a addmin can get in...I'm also not technichally verified but that's ok
-          
-        } else if(isVerified) {
-          router.push('./selectedMapDatePlebian'); // Replace with your regular user page route
-          //make sure a non verified user cannot get in!
-        } else{
-          console.log("Your not Sign Up or Verified error message needs to pop up @Yoni Singer")        
+        if (isVerified) {
+          console.log('You are signed up and verified!');
+          router.push({
+            pathname: '../selectedMapDatePlebian',
+          });
+        } else {
+          console.log("You're not signed up or verified. Error message needs to pop up @Yoni Singer");
         }
       }
     } catch (error) {
@@ -41,13 +44,12 @@ const LogIn = () => {
   };
 
   const goToSignUp = () =>{
-    router.push('./addMapDates/SignUp')
+    router.push('./SignUpPage')
   }
 
 
   return (
     <div>
-      <Header></Header>
       <h2>Log In</h2>
       <input
         type="email"
@@ -70,4 +72,6 @@ const LogIn = () => {
   );
 };
 
-export default LogIn;
+export {LogIn};
+
+

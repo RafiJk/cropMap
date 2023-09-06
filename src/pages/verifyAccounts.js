@@ -46,7 +46,7 @@ const AdminVerificationPage = () => {
           setUsersToVerify(usersList);
         } else {
           // User is not an admin, go back to login
-          router.push('/LogUp');
+          router.push('/Auth/LogInPage');
         }
       }
     };
@@ -85,7 +85,7 @@ const AdminVerificationPage = () => {
   const handleLogout = async () => {
     try {
       await auth.signOut(); // Sign out the user
-      router.push('/LogUp'); // Redirect to login page
+      router.push('/Auth/LogInPage'); // Redirect to login page
     } catch (error) {
       console.error('Error logging out:', error);
     }

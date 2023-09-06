@@ -20,7 +20,7 @@ const Header = () => {
           <br />
           Phritzda
         </Typography>
-        <Link href="/LogUp">
+        <Link href="/Auth/LogInPage">
           <Button color="inherit" style={{ backgroundColor: 'transparent', color: 'white' }}>Update Harvest</Button>
         </Link>
           <Link href='/about'>
