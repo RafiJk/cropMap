@@ -12,7 +12,7 @@ import Header from "../components/Header";
 import { db } from "../../firebase";
 import {styled } from '@mui/material';
 import SelectorButtonModal from "./SelectorComponent";
-import { MapComponent } from "./MapComponent";
+import { MapComponent } from "./mapComponent";
 
 
 const Container = styled("div")({

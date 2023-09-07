@@ -12,8 +12,7 @@ import {
   doc,
   getDoc,
 } from 'firebase/firestore';
-import { initializeApp } from 'firebase/app';
-import { auth, db } from './addMapDates/firebaseConfig.js'; // Import your Firebase auth and Firestore instances
+import { auth, db } from '../firebase';
 import Header from './components/Header';
 import { useRouter } from 'next/router';
 
