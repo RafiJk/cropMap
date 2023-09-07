@@ -1,16 +1,24 @@
 
 //BSD
-//OK LET'S MAKE THIS SECURE
-
 import React, { useState, useEffect } from 'react';
 import { collection, query, limit, orderBy, doc, updateDoc, getDocs, getDoc } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import { countiesListDE, countiesListMD, countiesListPA, countiesListVA, countiesListWV } from './countiesList.js';
 import Header from '../components/Header.js';
-import {LogIn} from '../Auth/LogInComponent.js';
-import {SignUp} from '../Auth/SignUpComponent.js';
+import { LogIn } from '../Auth/LogInComponent.js';
+import { SignUp } from '../Auth/SignUpComponent.js';
 import { useUpdater } from '../../userContext.js';
+import { Paper, FormControl, InputLabel, Select, MenuItem, Button, TextField, Typography } from '@mui/material';
+import { styled } from '@mui/material';
+
+const StyledPaper = styled(Paper)({
+  padding: '2rem',
+  margin: '2rem',
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+});
 
 const stateUrlMap = {
   "DE": "/theRealStateOfDE.json",
@@ -40,7 +48,7 @@ const Updater = () => {
     const selectedPercentType = percentType || null;
     const selectedCrop = cropType || null;
 
-    const countiesList = userSelectedCounties || [];
+    const countiesList = userSelectedCounties || countiesByState;
     let url = stateUrlMap[selectedState] || '';
 
     useEffect(() => {
@@ -129,37 +137,44 @@ const Updater = () => {
 
   return (
     <div>
-      <Header> </Header>
-      {verified ? (
-                <>
-                    {admin && (
-                        <select
-                            name="states"
-                            id="selectedState"
-                            value={selectedState}
-                            onChange={(e) => setSelectedState(e.target.value)}
-                        >
-                            <option value="">Select a state</option>
-                            {Object.keys(stateUrlMap).map((state, index) => (
-                                <option key={index} value={state}>
-                                    {state}
-                                </option>
-                            ))}
-                        </select>
-                    )}
-                    <select
-                        name="counties"
-                        id="selectedCounty"
-                        value={selectedCounty}
-                        onChange={(e) => setSelectedCounty(e.target.value)}
-                    >
-                        <option value="">Select a county</option>
-                        {countiesList.map((county, index) => (
-                            <option key={index} value={county}>
-                                {county}
-                            </option>
-                        ))}
-                    </select>
+      <Header />
+      <StyledPaper elevation={3}>
+        {verified ? (
+          <>
+            {admin && (
+              <FormControl fullWidth variant="outlined" margin="normal">
+                <InputLabel>Select a state</InputLabel>
+                <Select
+                  value={selectedState}
+                  onChange={(e) => setSelectedState(e.target.value)}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  {Object.keys(stateUrlMap).map((state) => (
+                    <MenuItem key={state} value={state}>
+                      {state}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            )}
+            <FormControl fullWidth variant="outlined" margin="normal">
+              <InputLabel>Select a county</InputLabel>
+              <Select
+                value={selectedCounty}
+                onChange={(e) => setSelectedCounty(e.target.value)}
+              >
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
+                {countiesByState[selectedState]?.map((county) => (
+                  <MenuItem key={county} value={county}>
+                    {county}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
       {selectedCounty && (
          <div className="the planted Input Bar!">
          <label>planted Percent:</label>
@@ -222,6 +237,7 @@ const Updater = () => {
           <LogIn />
         </>
       )}
+    </StyledPaper>
     </div>
   );
 };

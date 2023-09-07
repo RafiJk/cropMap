@@ -1,5 +1,30 @@
 import React from "react";
-import styles from "./legend.module.css"; // Adjust the import path and use your actual CSS module
+import styles from "./legend.module.css";
+import { styled } from '@mui/material';
+
+const Container = styled("div")({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+});
+
+const Row = styled("div")({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "100%", // Ensure it takes the full width
+  flexWrap: "wrap", // Allow wrapping if needed
+});
+
+const ColorGroup = styled("div")({
+  display: "flex",
+  flexDirection: "row",
+  alignItems: "center",
+  justifyContent: "center",
+  margin: "5px", // Some spacing between groups
+});
 
 const ColorRectangle = () => {
   const colors = [
@@ -15,15 +40,29 @@ const ColorRectangle = () => {
     "#782618"
   ];
 
+  const halfLength = Math.ceil(colors.length / 2);
+  const firstHalf = colors.slice(0, halfLength);
+  const secondHalf = colors.slice(halfLength);
+
   return (
-    <div className={styles.colorrectangle}>
-      {colors.map((color, index) => (
-        <React.Fragment key={index}>
-          <div className={styles.colorbox} style={{ backgroundColor: color }} />
-          {index < colors.length && <p className={styles.percentage}>{index * 10}-{(index + 1) * 10}%</p>}
-        </React.Fragment>
-      ))}
-    </div>
+    <Container className={styles.colorrectangle}>
+      <Row>
+        {firstHalf.map((color, index) => (
+          <ColorGroup key={index}>
+            <div className={styles.colorbox} style={{ backgroundColor: color }} />
+            <p className={styles.percentage}>{index * 10}-{(index + 1) * 10}%</p>
+          </ColorGroup>
+        ))}
+      </Row>
+      <Row>
+        {secondHalf.map((color, index) => (
+          <ColorGroup key={index + halfLength}>
+            <div className={styles.colorbox} style={{ backgroundColor: color }} />
+            <p className={styles.percentage}>{(index + halfLength) * 10}-{(index + halfLength + 1) * 10}%</p>
+          </ColorGroup>
+        ))}
+      </Row>
+    </Container>
   );
 };
 

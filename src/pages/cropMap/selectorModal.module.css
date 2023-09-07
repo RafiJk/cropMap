@@ -1,0 +1,106 @@
+
+
+.buttonBox {
+  display: flex;
+  padding: 15px;
+  margin-right: 200px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  margin-Top: 1rem;
+  border-radius: 10px;
+  background-color: #fff;
+  width: 100%;       /* Set width to 100% to make it responsive */
+  max-width: 500px;  /* Set a maximum width for larger screens */
+}
+
+.mapInfoBox {
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  background-color: #fff;
+}
+
+.mapInfoButtons {
+  margin-bottom: 15px;  /* Increased margin */
+  display: contents;
+}
+
+.mapInfoButtons button {
+  margin: 5px;  /* Adjusted margin */
+  min-width: 100px;
+  align-items: center;
+  justify-content: center;
+}
+
+.mapSelect {
+  margin-bottom: 15px;  /* Increased margin */
+  width: 100%;
+}
+
+.mapInfoBoxSelected {
+  padding: 10px;  /* Increased padding */
+  background-color: #f0f0f0;
+  border-radius: 8px;
+  min-width: 200px;
+  margin-top: 15px;  /* Added margin */
+}
+
+.mapInfoContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;  /* Added padding */
+}
+
+.mapInfoButton.selected {
+  background-color: #72bbbe;
+}
+
+/* Media Query for smaller screens */
+@media (max-width: 768px) {
+  .mapChartContainer {
+    flex-direction: column;
+  }
+
+  .buttonBox {
+    margin-right: 0;
+    width: 90%;       /* Adjust width for smaller screens */
+    margin-bottom: 400px;
+    margin-top: -150px;
+  }
+  .marginInfoButtons {
+    margin-right: 80px;  /* Reduce margin */
+  }
+
+  .mapInfoButtons button {
+    margin: 3px;  /* Reduce margin */
+    font-size: 0.8rem;  /* Reduce font size */
+    padding: 5px 10px;  /* Reduce padding */
+  }
+
+  .mapSelect {
+    margin-bottom: 10px;  /* Reduce margin */
+    margin-right: 60px;
+    font-size: 0.9rem;  /* Reduce font size */
+    width: 80%;  /* Adjust width for smaller screens */
+
+  }
+
+  .mapInfoBoxSelected {
+    font-size: 0.9rem;  /* Reduce font size */
+    padding: 5px;  /* Reduce padding */
+  }
+
+  .mapContainer {
+    width: 100%;
+    overflow: hidden;
+  }
+
+  .mapContainer .ComposableMap {
+    width: 100%;
+    height: auto;
+  }
+
+  
+}

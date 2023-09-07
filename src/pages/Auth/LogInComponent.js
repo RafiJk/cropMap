@@ -1,9 +1,27 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../../firebase'; // Import your Firebase auth and firestore instances
+import { auth, db } from '../../firebase';
 import { useRouter } from 'next/router';
-import { doc, getDoc } from 'firebase/firestore'; // Import the necessary firestore functions
+import { doc, getDoc } from 'firebase/firestore';
 import { useUpdater } from '../../userContext';
+import { Button, TextField, Container, Typography, Link, Paper } from '@mui/material';
+import { styled } from '@mui/material';
+
+const StyledContainer = styled(Container)({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  justifyContent: 'center',
+  height: '100vh',
+});
+
+const StyledPaper = styled(Paper)({
+  padding: '2rem',
+  width: '100%',
+  maxWidth: '400px',
+  boxShadow: '0px 4px 16px rgba(0, 0, 0, 0.1)',
+  borderRadius: '8px',
+});
 
 const LogIn = () => {
   const router = useRouter();
@@ -47,31 +65,48 @@ const LogIn = () => {
     router.push('./SignUpPage')
   }
 
-
   return (
-    <div>
-      <h2>Log In</h2>
-      <input
-        type="email"
-        placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
-      />
-      <button onClick={handleLogIn}>Log In</button>
-      <div className ="redirectToSignUp">
-        <p>New To The Map click here to sign up</p>
-        <button onClick ={goToSignUp}>SignUpPage</button>
-      </div>
-    </div>
+    <StyledContainer>
+      <StyledPaper elevation={3}>
+        <Typography variant="h4" gutterBottom>
+          Log In
+        </Typography>
+        <TextField
+          variant="outlined"
+          margin="normal"
+          fullWidth
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <TextField
+          variant="outlined"
+          margin="normal"
+          fullWidth
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        <Button
+          variant="contained"
+          color="primary"
+          fullWidth
+          style={{ marginTop: '1rem' }}
+          onClick={handleLogIn}
+        >
+          Log In
+        </Button>
+        <Typography variant="body1" style={{ marginTop: '1rem', textAlign: 'center' }}>
+          New To The Map?{' '}
+          <Link href="#" onClick={goToSignUp} underline="hover">
+            Click here to sign up
+          </Link>
+        </Typography>
+      </StyledPaper>
+    </StyledContainer>
   );
 };
 
-export {LogIn};
-
-
+export { LogIn };

@@ -1,5 +1,6 @@
 .colorrectangle {
   display: flex;
+  flex-direction: row;
   align-items: center;
 }
 
@@ -12,4 +13,16 @@
 .percentage {
   font-size: 12px;
   margin: 0 2px; /* Adjust the margin as needed */
+}
+
+@media (max-width: 768px) {
+  .legend {
+    font-size: 0.8rem;  /* Reduce font size */
+    padding: 5px;       /* Adjust padding */
+  }
+
+  .legendItem {
+    margin: 3px;        /* Adjust margin */
+    /* If the legend items are displayed horizontally, change to vertical layout */
+  }
 }
