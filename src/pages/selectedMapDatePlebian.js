@@ -7,7 +7,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { Box, Button } from "@mui/material";
 import { useRouter } from "next/router";
-import Header from "./components/Header";
+import Header from "../components/misc/Header";
 import Link from "next/link";
 import { styled } from "@mui/system";
 import { useUpdater } from "../userContext";

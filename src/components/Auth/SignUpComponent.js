@@ -10,7 +10,7 @@ import {
   countiesListPA,
   countiesListVA,
   countiesListWV,
-} from "../addMapDates/countiesList";
+} from "../countiesList";
 import {
   Button,
   TextField,

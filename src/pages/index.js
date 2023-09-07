@@ -3,7 +3,7 @@ import Autocomplete from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
 import { Box, Container, Typography, styled } from '@mui/material';
 import { useRouter } from 'next/router';
-import Header from './components/Header';
+import Header from '../components/misc/Header';
 
 const options = [
   { label: 'Corn', image: './singlecorn.jpeg', slug: 'Corn' },

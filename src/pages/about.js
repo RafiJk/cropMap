@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './components/Header'; // Assuming Header.js is inside a 'components' directory
+import Header from '../components/misc/Header'; // Assuming Header.js is inside a 'components' directory
 import { Container, Typography, Paper, Box } from '@mui/material';
 import { styled } from '@mui/material';
 

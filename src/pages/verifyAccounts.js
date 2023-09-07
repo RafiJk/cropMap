@@ -13,7 +13,7 @@ import {
   getDoc,
 } from 'firebase/firestore';
 import { auth, db } from '../firebase';
-import Header from './components/Header';
+import Header from '../components/misc/Header';
 import { useRouter } from 'next/router';
 
 const AdminVerificationPage = () => {
