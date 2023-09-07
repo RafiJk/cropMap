@@ -5,9 +5,9 @@ import { collection, query, limit, orderBy, doc, updateDoc, getDocs, getDoc } fr
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import { countiesListDE, countiesListMD, countiesListPA, countiesListVA, countiesListWV } from './countiesList.js';
-import Header from '../components/Header.js';
-import { LogIn } from '../Auth/LogInComponent.js';
-import { SignUp } from '../Auth/SignUpComponent.js';
+import Header from './misc/Header.js';
+import { LogIn } from './Auth/LogInComponent.js';
+import { SignUp } from './Auth/SignUpComponent.js';
 import { useUpdater } from '../userContext.js';
 import { Paper, FormControl, InputLabel, Select, MenuItem, Button, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material';
