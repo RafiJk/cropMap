@@ -1,4 +1,4 @@
-import { Updater } from "./mapUpdater";
+import { Updater } from '../../components/mapUpdater';
 
 function CropUpdater() {
     return <Updater/>;

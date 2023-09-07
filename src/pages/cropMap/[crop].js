@@ -11,7 +11,7 @@ import { useRouter } from "next/router";
 import Header from "../../components/misc/Header";
 import { db } from "../../firebase";
 import {styled } from '@mui/material';
-import SelectorButtonModal from "./SelectorComponent";
+import SelectorButtonModal from "../../components/mapComponents/SelectorComponent";
 import { MapComponent } from "../../components/mapComponents/mapComponent";
 
 
