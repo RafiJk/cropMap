@@ -102,7 +102,6 @@ const mapDateSelectorHome = () => {
     setCropType(value);
   };
 
-
   const handleGoClick = () => {
     console.log("GO CLICKED");
     console.log("verified: ", verified, "selectedState: ", selectedState, "cropType: ", cropType, "percentType: ", percentType);

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev -H 0.0.0.0",
     "build": "next build && prisma generate",
     "start": "next start",
     "lint": "next lint"
@@ -12,6 +12,7 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.11.16",
+    "@mui/lab": "^5.0.0-alpha.143",
     "@mui/material": "^5.14.8",
     "@mui/styled-engine-sc": "^5.12.0",
     "@prisma/client": "^4.15.0",
@@ -29,7 +30,7 @@
     "firebase": "^9.22.1",
     "fs": "^0.0.1-security",
     "leaflet": "^1.9.4",
-    "next": "13.4.2",
+    "next": "^13.4.19",
     "papaparse": "^5.4.1",
     "postcss": "8.4.23",
     "prisma-client": "^0.0.0",

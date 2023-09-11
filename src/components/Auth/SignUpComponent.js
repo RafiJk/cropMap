@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, collection, getDocs } from "firebase/firestore";
 import { useRouter } from "next/router";
+import { Autocomplete } from '@mui/material'
 import { auth, db } from "../../firebase";
 import {
   countiesListDE,
@@ -112,8 +113,11 @@ const SignUp = () => {
           <InputLabel>Select a state</InputLabel>
           <Select
             value={selectedState}
-            onChange={(e) => setSelectedState(e.target.value)}
-          >
+            onChange={(e) => {
+              setSelectedState(e.target.value);
+              setSelectedCounties([]); // Reset counties when state is changed
+            }}
+            >
             <MenuItem value="">
               <em>None</em>
             </MenuItem>
@@ -125,22 +129,26 @@ const SignUp = () => {
           </Select>
         </FormControl>
         <FormControl fullWidth variant="outlined" margin="normal">
-          <InputLabel>Counties</InputLabel>
-          <Select
+        <InputLabel shrink htmlFor="counties-search">
+        Counties
+      </InputLabel>
+          <Autocomplete
             multiple
+            id="counties-search"
+            options={countiesByState[selectedState] || []}
             value={selectedCounties}
-            onChange={(e) =>
-              setSelectedCounties(
-                Array.from(e.target.selectedOptions, (option) => option.value)
-              )
-            }
-          >
-            {countiesByState[selectedState]?.map((county) => (
-              <MenuItem key={county} value={county}>
-                {county}
-              </MenuItem>
-            ))}
-          </Select>
+            onChange={(event, newValue) => {
+              setSelectedCounties(newValue);
+            }}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                label="Counties"
+                placeholder="Search for a county"
+              />
+            )}
+          />
         </FormControl>
         <TextField
           variant="outlined"

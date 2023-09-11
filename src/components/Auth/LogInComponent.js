@@ -28,6 +28,8 @@ const LogIn = () => {
   const {
     setAdmin,
     setVerified,
+    setContextSelectedCounties,
+    setSelectedState
   } = useUpdater();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -43,6 +45,10 @@ const LogIn = () => {
         const userData = userDocSnapshot.data();
         const isAdmin = userData.Admin? true : false;
         const isVerified = userData.verified;
+        const isStates = userData.selectedState;
+        const isCounties = userData.selectedCounties;
+        setSelectedState(isStates);
+        setContextSelectedCounties(isCounties);
         setAdmin(isAdmin); 
         setVerified(isVerified);
 
@@ -53,7 +59,8 @@ const LogIn = () => {
             pathname: '../selectedMapDatePlebian',
           });
         } else {
-          console.log("You're not signed up or verified. Error message needs to pop up @Yoni Singer");
+          console.log("You're not signed up or aren't verified."); 
+          //IS IT MY TERRIORY TO DISPLAY A MESSAGE?
         }
       }
     } catch (error) {

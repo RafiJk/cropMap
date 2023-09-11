@@ -1,3 +1,5 @@
+
+// import { Console } from 'console';
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const UpdaterContext = createContext();
@@ -11,7 +13,7 @@ export const UpdaterProvider = ({ children }) => {
   const [admin, setAdmin] = useState(false);
   const [cropType, setCropType] = useState(null);
   const [percentType, setPercentType] = useState("");
-  const [selectedCounty, setSelectedCounty] = useState();
+  const [contextSelectedCounties, setContextSelectedCounties] = useState();
   const [selectedState, setSelectedState] = useState("");
 
   useEffect(() => {
@@ -21,8 +23,9 @@ export const UpdaterProvider = ({ children }) => {
       setVerified(parsedData.verified);
       setAdmin(parsedData.admin);
       setCropType(parsedData.cropType);
+      console.log(setCropType);
       setPercentType(parsedData.percentType);
-      setSelectedCounty(parsedData.selectedCounty);
+      setContextSelectedCounties(parsedData.contextSelectedCounties);
       setSelectedState(parsedData.selectedState);
     }
   }, []);
@@ -33,11 +36,11 @@ export const UpdaterProvider = ({ children }) => {
       admin,
       cropType,
       percentType,
-      selectedCounty,
+      contextSelectedCounties,
       selectedState
     };
     sessionStorage.setItem('updaterContext', JSON.stringify(dataToSave));
-  }, [verified, admin, cropType, percentType, selectedCounty, selectedState]);
+  }, [verified, admin, cropType, percentType, contextSelectedCounties, selectedState]);
 
   const value = {
     admin,
@@ -48,11 +51,12 @@ export const UpdaterProvider = ({ children }) => {
     setCropType,
     percentType,
     setPercentType,
-    selectedCounty,
-    setSelectedCounty,
+    contextSelectedCounties,
+    setContextSelectedCounties,
     selectedState,
     setSelectedState,
   };
+  console.log(cropType);
 
   return <UpdaterContext.Provider value={value}>{children}</UpdaterContext.Provider>;
 };
