@@ -12,6 +12,7 @@ import { Paper, FormControl, InputLabel, Select, MenuItem, Button, TextField, Ty
 import { styled } from '@mui/material';
 import { app, db, auth } from '/Users/rjkigner/projects/pest-map/src/firebase.js'
 
+
 const StyledPaper = styled(Paper)({
   padding: '2rem',
   margin: '2rem',
@@ -48,9 +49,8 @@ const Updater = () => {
 
     const selectedPercentType = percentType.slug || null;
     const selectedCrop = cropType.slug || null;
-    
 
-    const countiesList = contextSelectedCounties || countiesByState;
+    const countiesList = countiesByState;
     let url = stateUrlMap[selectedState] || '';
 
     const [editableCounties, setEditableCounties] = useState([]);
@@ -69,7 +69,7 @@ const Updater = () => {
                   const userDocSnapshot = await getDoc(userDocRef);
                   if (userDocSnapshot.exists()) {
                       const userData = userDocSnapshot.data();
-                      const userCounties = contextSelectedCounties || [];
+                      const userCounties = countiesByState || [];
                       setEditableCounties(userCounties);
                   }
               } catch (error) {
