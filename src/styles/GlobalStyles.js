@@ -2,7 +2,8 @@ import { createGlobalStyle } from 'styled-components';
 
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #6D9272; /* Replace #YOUR_COLOR with your desired color */
+    background-color: #C0E5AD;
+    font-family: 'Inter', sans-serif;
   }
 `;
 

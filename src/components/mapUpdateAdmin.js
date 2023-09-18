@@ -10,7 +10,7 @@ import { SignUp } from './Auth/SignUpComponent.js';
 import { useUpdater } from '../userContext.js';
 import { Paper, FormControl, InputLabel, Select, MenuItem, Button, TextField, Typography } from '@mui/material';
 import { styled } from '@mui/material';
-import { app, db, auth } from '/Users/rjkigner/projects/pest-map/src/firebase.js'
+import { db } from '../firebase.js';
 
 
 const StyledPaper = styled(Paper)({
