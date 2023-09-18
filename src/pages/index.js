@@ -14,10 +14,16 @@ const options = [
 const StyledContainer = styled(Container)({
   display: "flex",
   flexDirection: "column",
-  alignItems: "flex-start", // Aligns children to the left.
+  alignItems: "flex-start",
   justifyContent: "center",
   minHeight: "80vh",
-  paddingLeft: "5rem", // Add some padding from the left.
+  marginLeft: "1rem",
+  marginRight: "1rem",
+  "@media (max-width: 600px)": {
+    marginLeft: "0.3rem",
+    marginRight: ".3rem",
+    marginTop: "70px",
+  },
   position: "relative",
 });
 
@@ -33,8 +39,11 @@ const ImageBox = styled(Box)({
 
 const StyledTextField = styled(TextField)({
   backgroundColor: "#FAFAFA",
-  borderRadius: "15px", // More rounded corners.
-  width: "100%", // Take full width of its container.
+  borderRadius: "15px",
+  width: "100%",
+  "@media (max-width: 600px)": {
+    fontSize: "0.8rem", // Reduce font size for mobile.
+  },
 });
 
 const GoButton = styled(Button)({
@@ -42,28 +51,43 @@ const GoButton = styled(Button)({
   background: "#0E5125A6",
   color: "black",
   opacity: 0.65,
-  fontWeight: "bold", // Make the font weight of the "Go" button larger.
+  fontWeight: "bold",
   "&:hover": {
     backgroundColor: "#0E5125A6",
   },
-  marginLeft: "auto", // Centers the button within its container.
+  marginLeft: "auto",
   marginRight: "auto",
+  "@media (max-width: 600px)": {
+    fontSize: "0.9rem", // Reduce font size for mobile.
+  },
 });
 
 const ContentBox = styled(Box)({
   zIndex: 2,
   padding: "2rem",
-  width: "350px", // Make the box a bit wider.
-  minHeight: "auto", // Adjust the height.
-  borderRadius: "15px", // More rounded corners.
+  width: "500px",
+  minHeight: "auto",
+  borderRadius: "15px",
   background: "rgba(255, 255, 255, 0.8)",
   boxShadow: "0px 4px 16px rgba(0, 0, 0, 0.1)",
+  "@media (max-width: 600px)": {
+    width: "85vw", // Make it relative to the viewport width for mobile.
+    padding: "1rem", // Reduce padding for mobile.
+  },
 });
 
-const WhiteTypography = styled(Typography)({
+const WhiteTypography = styled(Typography)(({ theme }) => ({
   color: "white",
+  "&.MuiTypography-h2": {
+    fontSize: "100px", // Set this to the desired font size for h2
+    textShadow: "4px 4px 8px rgba(0, 0, 0, 0.5)",
+  },
+  "&.MuiTypography-h1": {
+    fontSize: "130px", // Set this to the desired font size for h1
+    textShadow: "6px 6px 10px rgba(0, 0, 0, 0.5)",
+  },
   fontWeight: 900,
-});
+}));
 
 const Home = () => {
   const router = useRouter();
@@ -102,7 +126,6 @@ const Home = () => {
           <Autocomplete
             id="combo-box-demo"
             options={options}
-
             open={isDropdownOpen}
             onOpen={() => setIsDropdownOpen(true)}
             getOptionLabel={(option) => option.label}
