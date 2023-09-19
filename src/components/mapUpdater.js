@@ -1,6 +1,6 @@
 //BSD
 import React, { useState, useEffect } from 'react';
-import { collection, query, limit, orderBy, doc, updateDoc, getDocs, getDoc } from 'firebase/firestore';
+import { collection, query, limit, orderBy, doc, updateDoc, getDocs, getDoc, setDoc, Timestamp } from 'firebase/firestore';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 import { useRouter } from 'next/router';
 import { countiesListDE, countiesListMD, countiesListPA, countiesListVA, countiesListWV } from './countiesList.js';
@@ -58,13 +58,61 @@ const Updater = () => {
     // State variable to hold the currently chosen county for editing
     const [currentCounty, setCurrentCounty] = useState('');
 
+    const getOrSetDoc = async () => { //might not want asynch??
+      let sC = selectedCrop.charAt(0).toUpperCase() + selectedCrop.slice(1);
+      const collectionName = `${sC}Map`; 
+      const cropMapCollection = collection(db, collectionName);
+      const cmq = query(cropMapCollection, orderBy("date", "desc"), limit(1)) //get most recent doc
+      try { 
+        const querySnapshot = await getDocs(cmq);
+        const snapshot = querySnapshot.docs[0];
+        //there used to be a try catch to see if there was a snapshot...i got rid of it... maybe shou;dn thave
+        let currentDate = (Math.floor(Date.now())/1000); //where we are currently
+        let snapshotDate = await ((snapshot.data().date).seconds); //get DateFrom most recent doc
+        const diffInDays = (currentDate - snapshotDate); //do we need to make a newfile
+        if ( diffInDays >= 604800){ //rn this is testing if it's less then 7 day
+          console.log('here goof')
+          makeNewDoc();
+        }else{
+          console.log('here bad')
+        }
+      } catch (error) {
+        console.error("Error retrieving the most recent document:", error); //this should catch everything
+      }
+    };
+
+    const makeNewDoc = () => { //access collection and iterate through and create it in form
+      let sC = selectedCrop.charAt(0).toUpperCase() + selectedCrop.slice(1);
+      const collectionName = `${sC}Map`; 
+      const cropMapCollection = collection(db, collectionName);
+      
+      const newMapDocRef = doc(collection(db,(collectionName).toString())); 
+      setDoc(newMapDocRef, { date: Timestamp.now() }).then(() => {
+        const countyHarvestsCollectionRef = collection(newMapDocRef, 'CountyHarvests');
+        for (const state in countiesByState) {
+          const stateCounties = countiesByState[state];
+          for (const county of stateCounties) {
+            const newHarvestDocRef = doc(countyHarvestsCollectionRef, county);
+            setDoc(newHarvestDocRef, {
+              state: state,
+              county: county,
+              plantedPercent: 0,
+              emergencePercent: 0,
+              harvestPercent: 0,
+            });
+          }
+        }
+      })
+    }
+
     useEffect(() => {
+      getOrSetDoc();
       const auth = getAuth();
       const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
+  
           setAdmin(authUser)
           if (authUser) {
               try {
-                  
                   const userDocRef = doc(db, 'myUsers', authUser.uid);
                   const userDocSnapshot = await getDoc(userDocRef);
                   if (userDocSnapshot.exists()) {
@@ -78,6 +126,7 @@ const Updater = () => {
           }
       });
       return () => {
+    
           unsubscribe();
       };
   ``}, []);
@@ -151,8 +200,13 @@ const Updater = () => {
       fetchCountyData(currentCounty);
     }
   }, [currentCounty]);
-  
+
   const fetchCountyData = async (county) => {
+    // Check if data for this county is already in state
+    if (countyData[county]) {
+      return; // Data is already there, so return early
+    }
+  
     let sC = selectedCrop.charAt(0).toUpperCase() + selectedCrop.slice(1);
     const collectionName = `${sC}Map`; 
     const cropMapCollection = collection(db, collectionName);
@@ -177,6 +231,10 @@ const Updater = () => {
       console.error('Error fetching county data:', error);
     }
   };
+ 
+  
+  
+  
   
 
 
@@ -289,5 +347,3 @@ const Updater = () => {
 };
 
 export {Updater};
-
-

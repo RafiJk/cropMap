@@ -103,6 +103,8 @@ const MapChart = () => {
     setSelectedCounty(county === selectedCounty ? null : county);
   };
 
+
+
   return (
     <>
       <Header />
