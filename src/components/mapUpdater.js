@@ -36,6 +36,7 @@ const countiesByState = {
   "PA": countiesListPA
 };
 
+
 const Updater = () => {
     const { verified, admin, percentType, cropType, setCropType, setAdmin, contextSelectedCounties, setSelectedCounty, selectedState, setSelectedState } = useUpdater();
     console.log("Admin: ", admin);
@@ -43,6 +44,7 @@ const Updater = () => {
     console.log(percentType.slug);
     const [countyData, setCountyData] = useState({});
     const [isUpdating, setIsUpdating] = useState(false);
+
     // const [userSelectedCounties, setUserSelectedCounties] = useState([]);
     
 
@@ -104,9 +106,24 @@ const Updater = () => {
         }
       })
     }
-
+    
     useEffect(() => {
+      // Fetch data for all editable counties when the component mounts
+      if (editableCounties.length) {
+        editableCounties.forEach(county => {
+          fetchCountyData(county);
+        });
+      }
+    }, [editableCounties]); 
+    
+    useEffect(() => {
+
       getOrSetDoc();
+
+ 
+
+    
+
       const auth = getAuth();
       const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
   
@@ -169,6 +186,7 @@ const Updater = () => {
     for (const county of Object.keys(countyData)) {
       console.log(county);
       setIsUpdating(true);
+      console.log(county);
       await updateHarvest(county);  // Just send the county name
       setIsUpdating(false);
     }
@@ -200,7 +218,7 @@ const Updater = () => {
       fetchCountyData(currentCounty);
     }
   }, [currentCounty]);
-
+  
   const fetchCountyData = async (county) => {
     // Check if data for this county is already in state
     if (countyData[county]) {
@@ -231,119 +249,84 @@ const Updater = () => {
       console.error('Error fetching county data:', error);
     }
   };
- 
   
-  
-  
-  
+  const [searchTerm, setSearchTerm] = useState("");
 
-
+  const filteredCounties = editableCounties.filter(county =>
+    county.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
     <div>
       <Header />
       <StyledPaper elevation={3}>
         {verified ? (
           <>
-            {admin && (
-              <FormControl fullWidth variant="outlined" margin="normal">
-                <InputLabel>Select a state</InputLabel>
-                <Select
-                  value={selectedState}
-                  onChange={(e) => setSelectedState(e.target.value)}
-                >
-                  <MenuItem value="">
-                    <em>None</em>
-                  </MenuItem>
-                  {Object.keys(stateUrlMap).map((state) => (
-                    <MenuItem key={state} value={state}>
-                      {state}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            )}
-            <FormControl fullWidth variant="outlined" margin="normal">
-              <InputLabel>Select a county</InputLabel>
-                <Select
-                    value={currentCounty}
-                    onChange={(e) => setCurrentCounty(e.target.value)}
-                >
-                    <MenuItem value="">
-                        <em>None</em>
-                    </MenuItem>
-                    {editableCounties.map((county)  => (
-                        <MenuItem key={county} value={county}>
-                            {county}
-                        </MenuItem>
-                    ))}
-                  
-                </Select>
-            </FormControl>
-      {currentCounty && (
-         <div className="the planted Input Bar!">
-         <label>planted Percent:</label>
-         <input
-            type="number"
-            name="plantedPercent"
-            value={Math.ceil(countyData[currentCounty]?.plantedPercent || 0)} // Round to ceiling
-            min="0"
-            max="100"
-            onChange={(event) => handleInputChange(event, currentCounty, "plantedPercent")}
-            // onKeyPress={(event) => handleKeyPress(event, selectedCounty)}
-          />
-         <span className="the text in the input bar">
-           Current Percent: {countyData[currentCounty]?.plantedPercent || 0}%
-         </span>
-       </div>
-      )}
-      {currentCounty && (
-         <div className="the Input Bar!">
-         <label>emergencePercent:</label>
-         <input
-            type="number"
-            name="emergencePercent"
-            value={Math.ceil(countyData[currentCounty]?.emergencePercent || 0)} // Round to ceiling
-            min="0"
-            max="100"
-            onChange={(event) => handleInputChange(event, currentCounty, "emergencePercent")}
-            // onKeyPress={(event) => handleKeyPress(event, selectedCounty)}
-          />
-         <span className="the text in the input bar">
-           Current Percent: {countyData[currentCounty]?.emergencePercent || 0}%
-         </span>
-       </div>
-      )}
-      {currentCounty && (
-         <div className="the Input Bar!">
-         <label>Harvest Percent:</label>
-         <input
-            type="number"
-            name="harvestPercent"
-            value={Math.ceil(countyData[currentCounty]?.harvestPercent || 0)} // Round to ceiling
-            min="0"
-            max="100"
-            onChange={(event) => handleInputChange(event, currentCounty, "harvestPercent")}
-            // onKeyPress={(event) => handleKeyPress(event, selectedCounty)}
-          />
-         <span className="the text in the input bar">
-           Current Percent: {countyData[currentCounty]?.harvestPercent || 0}%
-         </span>
-       </div>
-      )}
-      <button onClick={() => handleUpdateClick()} disabled={isUpdating}>
-        {isUpdating ? 'Updating...' : 'Update Harvest Percent'}
-      </button>
-        </>
-      ) : (
-        // If the user is not authenticated, show sign-up and log-in components
-        <>
-          <SignUp />
-          <LogIn />
-        </>
-      )}
-    </StyledPaper>
+            {editableCounties.map((county) => (
+              <div key={county}>
+                <Typography variant="h6">{county}</Typography>
+
+                <div className="the planted Input Bar!">
+                  <label>Planted Percent:</label>
+                  <input
+                    type="number"
+                    name="plantedPercent"
+                    value={Math.ceil(countyData[county]?.plantedPercent || 0)}
+                    min="0"
+                    max="100"
+                    onChange={(event) => handleInputChange(event, county, "plantedPercent")}
+                  />
+                  <span className="the text in the input bar">
+                    Current Percent: {countyData[county]?.plantedPercent || 0}%
+                  </span>
+                </div>
+
+                <div className="the Input Bar!">
+                  <label>Emergence Percent:</label>
+                  <input
+                    type="number"
+                    name="emergencePercent"
+                    value={Math.ceil(countyData[county]?.emergencePercent || 0)}
+                    min="0"
+                    max="100"
+                    onChange={(event) => handleInputChange(event, county, "emergencePercent")}
+                  />
+                  <span className="the text in the input bar">
+                    Current Percent: {countyData[county]?.emergencePercent || 0}%
+                  </span>
+                </div>
+
+                <div className="the Input Bar!">
+                  <label>Harvest Percent:</label>
+                  <input
+                    type="number"
+                    name="harvestPercent"
+                    value={Math.ceil(countyData[county]?.harvestPercent || 0)}
+                    min="0"
+                    max="100"
+                    onChange={(event) => handleInputChange(event, county, "harvestPercent")}
+                  />
+                  <span className="the text in the input bar">
+                    Current Percent: {countyData[county]?.harvestPercent || 0}%
+                  </span>
+                </div>
+
+              </div>
+            ))}
+
+            <button onClick={() => handleUpdateClick()} disabled={isUpdating}>
+              {isUpdating ? 'Updating...' : 'Update Harvest Percent'}
+            </button>
+
+          </>
+        ) : (
+          <>
+            <SignUp />
+            <LogIn />
+          </>
+        )}
+      </StyledPaper>
     </div>
   );
 };
 
-export {Updater};
+export { Updater };

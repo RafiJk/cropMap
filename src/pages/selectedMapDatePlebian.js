@@ -105,13 +105,21 @@ const mapDateSelectorHome = () => {
   const handleGoClick = () => {
     console.log("GO CLICKED");
     console.log("verified: ", verified, "selectedState: ", selectedState, "cropType: ", cropType, "percentType: ", percentType);
-    if (verified && ((admin && selectedState) || !admin) && cropType && percentType) {
+    
+    if (verified && ((admin && selectedState)) && cropType && percentType) {
+    console.log("Router pushed")
+    router.push({
+      pathname: `addMapDates/adminUpdater`,
+    })
+    } else if (verified && ((!admin && selectedState)) && cropType && percentType) {
       console.log("Router pushed")
       router.push({
         pathname: `addMapDates/updater`,
       });
-    }
+    
+    }else{
     console.log("Router not pushed",(verified && ((admin && selectedState) || !admin ) && cropType && percentType) )
+    }
   };
 
   const goToVerifyPage = () => {

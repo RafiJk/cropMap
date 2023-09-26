@@ -68,9 +68,9 @@ const Updater = () => {
                   const userDocRef = doc(db, 'myUsers', authUser.uid);
                   const userDocSnapshot = await getDoc(userDocRef);
                   if (userDocSnapshot.exists()) {
-                      const userData = userDocSnapshot.data();
-                      const userCounties = countiesByState || [];
-                      setEditableCounties(userCounties);
+                    const userState = userData.state; // assuming userData has a 'state' property which stores the state abbreviation
+                    const userCounties = countiesByState[selectedState] || [];
+                    setEditableCounties(userCounties);
                   }
               } catch (error) {
                   console.error('Error fetching user data:', error);
