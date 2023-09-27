@@ -37,6 +37,7 @@ const ImageBox = styled(Box)({
   overflow: "hidden",
 });
 
+
 const StyledTextField = styled(TextField)({
   backgroundColor: "#FAFAFA",
   borderRadius: "15px",
