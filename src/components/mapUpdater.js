@@ -114,7 +114,6 @@ const Updater = () => {
     selectedState,
     setSelectedState,
   } = useUpdater();
-  console.log("Admin: ", admin);
   const [countyData, setCountyData] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
 
