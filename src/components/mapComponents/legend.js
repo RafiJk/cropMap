@@ -28,16 +28,16 @@ const ColorGroup = styled("div")({
 
 const ColorRectangle = () => {
   const colors = [
-    "#c0c0c0",
-    "#ffedea",
-    "#ffcec5",
-    "#ffad9f",
-    "#ff8a75",
-    "#ff5533",
-    "#e2492d",
-    "#be3d26",
-    "#9a311f",
-    "#782618"
+    "#ffffe0",
+    "#eef9bf",
+    "#ddf3a0",
+    "#ccd28a",
+    "#b9bd75",
+    "#a3a864",
+    "#879254",
+    "#6a7b48",
+    "#4f633d",
+    "#324a32"  
   ];
 
   const halfLength = Math.ceil(colors.length / 2);

@@ -15,16 +15,16 @@ const MapComponent = ({ data, colorField, handleCountyClick, mapScale }) => {
   const colorScale = scaleQuantize()
     .domain([0, 100])
     .range([
-      "#c0c0c0",
-      "#ffedea",
-      "#ffcec5",
-      "#ffad9f",
-      "#ff8a75",
-      "#ff5533",
-      "#e2492d",
-      "#be3d26",
-      "#9a311f",
-      "#782618"
+      "#ffffe0",
+      "#eef9bf",
+      "#ddf3a0",
+      "#ccd28a",
+      "#b9bd75",
+      "#a3a864",
+      "#879254",
+      "#6a7b48",
+      "#4f633d",
+      "#324a32"  
     ]);
 
   return (
@@ -45,7 +45,7 @@ const MapComponent = ({ data, colorField, handleCountyClick, mapScale }) => {
                     style={{
                       default: {
                         outline: "none",
-                        stroke: "#fff",
+                        stroke: "#000",
                         strokeWidth: 0.5,
                       },
                       hover: {
