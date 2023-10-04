@@ -91,15 +91,17 @@ const mapDateSelectorHome = () => {
   } = useUpdater();
 
   const handleStateChange = (event, value) => {
-    setSelectedState(value);
+    setSelectedState(useUpdater.selectedState);
   };
 
   const handlePercentTypeChange = (event, value) => {
-    setPercentType(value);
+    console.log(toString(value.slug))
+    setPercentType(value.slug);
   };
 
   const handleCropChange = (event, value) => {
-    setCropType(value);
+    console.log(toString(value.slug))
+    setCropType(value.slug);
   };
 
   const handleGoClick = () => {

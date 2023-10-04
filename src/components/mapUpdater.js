@@ -119,8 +119,8 @@ const Updater = () => {
 
   // const [userSelectedCounties, setUserSelectedCounties] = useState([]);
 
-  const selectedPercentType = percentType.slug || null;
-  const selectedCrop = cropType.slug || null;
+  const selectedPercentType = percentType || null;
+  const selectedCrop = cropType || null;
 
   const countiesList = contextSelectedCounties || countiesByState;
   let url = stateUrlMap[selectedState] || "";
@@ -132,7 +132,10 @@ const Updater = () => {
 
   const getOrSetDoc = async () => {
     //might not want asynch??
-    let sC = selectedCrop.charAt(0).toUpperCase() + selectedCrop.slice(1);
+    let sC = null;
+    if (selectedCrop != null){
+      let sC = selectedCrop.charAt(0).toUpperCase() + selectedCrop.slice(1);
+    }
     const collectionName = `${sC}Map`;
     const cropMapCollection = collection(db, collectionName);
     const cmq = query(cropMapCollection, orderBy("date", "desc"), limit(1)); //get most recent doc
