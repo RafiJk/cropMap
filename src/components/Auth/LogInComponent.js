@@ -52,20 +52,22 @@ const LogIn = () => {
         setAdmin(isAdmin); 
         setVerified(isVerified);
 
-        // Redirect based on admin status
-        if (isVerified) {
+      if (!auth.currentUser.emailVerified) {
+        userData.verified = false;
+        console.log("User has not verified their email.");
+        console.log("gotta take you home buddy...we want a module here tho in future");
+        router.push(`${location.origin}`);
+      } else {
           console.log('You are signed up and verified!');
           router.push({
-            pathname: '../selectedMapDatePlebian',
+              pathname: '../selectedMapDatePlebian',
           });
-        } else {
-          console.log("You're not signed up or aren't verified."); 
-          //IS IT MY TERRIORY TO DISPLAY A MESSAGE?
-        }
       }
+     }
     } catch (error) {
       console.error('Error logging in:', error);
     }
+  
   };
 
   const goToSignUp = () =>{

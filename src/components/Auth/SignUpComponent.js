@@ -1,10 +1,12 @@
 //BSD
 import React, { useState } from "react";
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc, collection, getDocs } from "firebase/firestore";
 import { useRouter } from "next/router";
 import { Autocomplete } from '@mui/material'
 import { auth, db } from "../../firebase";
+
 import {
   countiesListDE,
   countiesListMD,
@@ -56,18 +58,33 @@ const SignUp = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedCounties, setSelectedCounties] = useState([]);
 
+  const allowedDomains = ["@terpmail.umd.edu", "@umd.edu"];
+
+  const isAllowedDomain = (email) => {
+      return allowedDomains.some(domain => email.endsWith(domain));
+  };
+
   const handleSignUp = async () => {
     try {
-      // Create the user with email and password
-      const userCredential = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      // Check if the email domain is allowed
+      if (!isAllowedDomain(email)) {
+          console.error("Registration allowed only for specific school domains");
+          alert("Registration allowed only for specific school domains");
+          return;
+      }
+
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+
+      await sendEmailVerification(userCredential.user, {
+         url: `${location.origin}`
+      });
+      
 
       // Create the myUsers collection if it doesn't exist
       const collectionRef = collection(db, "myUsers");
       const collectionSnapshot = await getDocs(collectionRef);
+
       if (collectionSnapshot.size === 0) {
         await setDoc(doc(db, "myUsers", "initialDoc"), { created: true });
       }
@@ -78,21 +95,21 @@ const SignUp = () => {
         Admin: false,
         credentials: "I like Ice Cream",
         Instuition: "UMD",
-        verified: false,
+        verified: true,
         selectedState: selectedState,
         selectedCounties: selectedCounties,
-        // Other additional fields
       };
 
       // Store the data in the myUsers collection
-      await setDoc(doc(db, "myUsers", userCredential.user.uid), userData);
-      router.push("../");
+      await setDoc(doc(db, "myUsers", user.uid), userData);
+      
+     
 
-      // Redirect to another page or perform other actions on successful sign-up
     } catch (error) {
       console.error("Error signing up:", error);
     }
   };
+
 
   return (
     <StyledContainer>
