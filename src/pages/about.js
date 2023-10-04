@@ -31,7 +31,7 @@ const About = () => {
             Welcome to The Crop Map, a cutting-edge platform that provides insights into the agricultural landscape. Our mission is to empower farmers, researchers, and enthusiasts with accurate and timely data on crop cycles.
           </Typography>
           <Typography variant="body1" paragraph>
-            This map is an interface designed to reflect the rates of planting, emergence, and harvesting of wheat, soy, and corn. The data is regularly updated by Agriculture Extension Educators and Specialists. It's displayed on the map using a color scale, ranging from white to dark red, indicating the percentage of each type of crop that has reached each stage.
+            This map is an interface designed to reflect the rates of planting, emergence, and harvesting of wheat, soy, and corn. The data is regularly updated by Agriculture Extension Educators and Specialists. It's displayed on the map using a color scale of different shades of green, indicating the percentage of each type of crop that has reached each stage.
           </Typography>
           <Typography variant="body1" paragraph>
             We believe in the power of data-driven decisions. By providing this platform, we aim to support the agricultural community in optimizing their practices, predicting trends, and ensuring sustainable and efficient farming.
