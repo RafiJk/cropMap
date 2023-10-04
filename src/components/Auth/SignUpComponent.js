@@ -4,6 +4,7 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { getAuth, sendEmailVerification } from "firebase/auth";
 import { doc, setDoc, collection, getDocs } from "firebase/firestore";
 import { useRouter } from "next/router";
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 import { Autocomplete } from '@mui/material'
 import { auth, db } from "../../firebase";
 
@@ -57,6 +58,8 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [selectedState, setSelectedState] = useState("");
   const [selectedCounties, setSelectedCounties] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+
 
   const allowedDomains = ["@terpmail.umd.edu", "@umd.edu"];
 
@@ -95,15 +98,21 @@ const SignUp = () => {
         Admin: false,
         credentials: "I like Ice Cream",
         Instuition: "UMD",
-        verified: true,
+        verified: false,
         selectedState: selectedState,
         selectedCounties: selectedCounties,
       };
 
       // Store the data in the myUsers collection
       await setDoc(doc(db, "myUsers", user.uid), userData);
-      
-     
+
+      setOpenDialog(true);
+
+      /*right here - assuming everything else has finisehd updating,
+      make a pop up window that'll display. It'll say please check email to finish 
+      signing up, then there will be a button that says ok, and it'll reroute you to
+      home
+      */
 
     } catch (error) {
       console.error("Error signing up:", error);
@@ -185,6 +194,27 @@ const SignUp = () => {
         >
           Sign Up
         </Button>
+          <Dialog
+            open={openDialog}
+            onClose={() => setOpenDialog(false)}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+          <DialogTitle id="alert-dialog-title">{"Email Verification"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Please check your email to finish signing up.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => {
+              setOpenDialog(false);
+              router.push("/"); // Navigate to home page after pressing "OK"
+            }} color="primary">
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>  
       </StyledPaper>
     </StyledContainer>
   );

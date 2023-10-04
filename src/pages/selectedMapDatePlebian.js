@@ -115,14 +115,14 @@ const mapDateSelectorHome = () => {
     // })
     //should be else if ...but not now cause need to guard admi
     //} 
-    if (verified && ((!admin && selectedState)) && cropType && percentType) {
+    if (verified && selectedState && cropType && percentType) {
       console.log("Router pushed")
       router.push({
         pathname: `addMapDates/updater`,
       });
     
     }else{
-    console.log("Router not pushed",(verified && ((admin && selectedState) || !admin ) && cropType && percentType) )
+      console.log("Router not pushed",(!verified && ((admin && selectedState) || !admin ) && cropType && percentType) )
     }
   };
 
@@ -141,23 +141,6 @@ const mapDateSelectorHome = () => {
               <Title>Welcome to the Update Screen</Title>
               <Subtitle>Select a state and then a crop to begin</Subtitle>
             </Box>
-            {admin && (
-              <Box width="300px" marginTop="20px">
-                <Autocomplete
-                  id="state-combo-box"
-                  options={stateOptions}
-                  getOptionLabel={(option) => option.label}
-                  onChange={handleStateChange}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Select a state"
-                      variant="outlined"
-                    />
-                  )}
-                />
-              </Box>
-            )}
             <Box width="300px" marginTop="20px">
               <Autocomplete
                 id="percent-combo-box"
@@ -182,7 +165,7 @@ const mapDateSelectorHome = () => {
                 renderInput={(params) => (
                   <TextField
                     {...params}
-                    label="Select a Percent"
+                    label="Select a Crop"
                     variant="outlined"
                   />
                 )}
@@ -201,7 +184,6 @@ const mapDateSelectorHome = () => {
                 Go
               </Button>
             ) : null}
-            {admin && <button onClick={goToVerifyPage}>Verifier</button>}
           </ContentBox>
         </Box>
       </MainContainer>

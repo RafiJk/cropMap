@@ -31,7 +31,7 @@ export const countiesListVA = [
    'Norfolk', 'Northampton VA', 'Northumberland VA', 'Norton', 'Nottoway', 
     'Orange', 'Page', 'Patrick', 'Petersburg', 'Pittsylvania', 'Poquoson', 
     'Portsmouth', 'Powhatan', 'Prince Edward', 'Prince George', 'Prince William',
-    'Pulaski', 'Radford', 'Rappahannock', 'Richmond', 'Richmond', 'Roanoke', 
+    'Pulaski', 'Radford', 'Rappahannock', 'Richmond', 'Roanoke', 
     'Rockbridge', 'Rockingham', 'Russell', 'Salem', 'Scott', 'Shenandoah',
      'Smyth', 'Southampton', 'Spotsylvania', 'Stafford', 'Staunton', 'Suffolk', 
      'Surry', 'Sussex VA', 'Tazewell', 'Virginia Beach', 'Warren VA', 'Washington VA', 

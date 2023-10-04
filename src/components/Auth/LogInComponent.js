@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '../../firebase';
 import { useRouter } from 'next/router';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, updateDoc } from 'firebase/firestore';
 import { useUpdater } from '../../userContext';
 import { Button, TextField, Container, Typography, Link, Paper } from '@mui/material';
 import { styled } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+
 
 const StyledContainer = styled(Container)({
   display: 'flex',
@@ -33,6 +35,10 @@ const LogIn = () => {
   } = useUpdater();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [openEmailReminderDialog, setOpenEmailReminderDialog] = useState(false);
+  const [passwordError, setPasswordError] = useState(false);
+  const [passwordHelperText, setPasswordHelperText] = useState('');
+
 
   const handleLogIn = async () => {
     try {
@@ -53,19 +59,41 @@ const LogIn = () => {
         setVerified(isVerified);
 
       if (!auth.currentUser.emailVerified) {
-        userData.verified = false;
+
+        if (isVerified != false){ // this check should be unnecessary but still good
+          await updateDoc(userDocRef, {
+            verified: false
+          });
+        }
         console.log("User has not verified their email.");
         console.log("gotta take you home buddy...we want a module here tho in future");
-        router.push(`${location.origin}`);
+        setOpenEmailReminderDialog(true);
+        // router.push(`${location.origin}`);
       } else {
+        if (isVerified == false){
+          await updateDoc(userDocRef, {
+            verified: true
+          });
+        }
           console.log('You are signed up and verified!');
           router.push({
               pathname: '../selectedMapDatePlebian',
           });
       }
      }
-    } catch (error) {
-      console.error('Error logging in:', error);
+      } catch (error) {
+      if (error.code === "auth/wrong-password") {
+        setPasswordError(true);
+        setPasswordHelperText("Incorrect password");
+      } else if (error.code === "auth/user-not-found") {
+        setEmail(e => { // Resetting email, you might want to keep the entered email as well
+          setPasswordError(true); 
+          setPasswordHelperText("No user associated with this email");
+          return "";
+        });
+      } else {
+        console.error('Error logging in:', error);
+      }
     }
   
   };
@@ -95,8 +123,14 @@ const LogIn = () => {
           fullWidth
           label="Password"
           type="password"
+          error={passwordError}
+          helperText={passwordHelperText}
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setPasswordError(false); 
+            setPasswordHelperText(''); 
+          }}
         />
         <Button
           variant="contained"
@@ -107,6 +141,28 @@ const LogIn = () => {
         >
           Log In
         </Button>
+        <Dialog
+          open={openEmailReminderDialog}
+          onClose={() => setOpenEmailReminderDialog(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Email Verification"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Please verify your email before proceeding. Check your inbox for a verification email.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => {
+              setOpenEmailReminderDialog(false);
+              router.push("/"); // Navigate to home page after pressing "OK"
+            }} color="primary">
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
+
         <Typography variant="body1" style={{ marginTop: '1rem', textAlign: 'center' }}>
           New To The Map?{' '}
           <Link href="#" onClick={goToSignUp} underline="hover">

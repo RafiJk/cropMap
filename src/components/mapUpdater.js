@@ -13,7 +13,6 @@ import {
   Timestamp,
 } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { useRouter } from "next/router";
 import {
   countiesListDE,
   countiesListMD,
@@ -25,6 +24,7 @@ import Header from "./misc/Header.js";
 import { LogIn } from "./Auth/LogInComponent.js";
 import { SignUp } from "./Auth/SignUpComponent.js";
 import { useUpdater } from "../userContext.js";
+import { useRouter } from "next/router";
 import {
   Paper,
   FormControl,
@@ -115,6 +115,7 @@ const Updater = () => {
     selectedState,
     setSelectedState,
   } = useUpdater();
+  const router = useRouter();
   const [countyData, setCountyData] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -261,7 +262,7 @@ const Updater = () => {
       await updateHarvest(county); // Just send the county name
       setIsUpdating(false);
     }
-    // router.push('/');
+    router.push(`${location.origin}`);
   };
 
   const handleInputChange = (event, county, type) => {
@@ -479,7 +480,7 @@ const Updater = () => {
                 width: "100%", // centering the button
               }}
             >
-              {isUpdating ? "Updating..." : "Update Harvest Percents"}
+              {isUpdating ? "Updating...Redirecting Home" : "Update Harvest Percents"}
             </Button>
           </>
         ) : (
