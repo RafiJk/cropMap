@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ComposableMap, Geographies, Geography } from 'react-simple-maps';
 import styles from './MapComponent.module.css';
 import { scaleQuantize } from 'd3-scale';
@@ -12,6 +12,26 @@ const stateGeographyData = [
 ];
 
 const MapComponent = ({ data, colorField, handleCountyClick, mapScale }) => {
+  const [localMapScale, setLocalMapScale] = useState(mapScale);
+
+  useEffect(() => {
+    const updateMapScale = () => {
+      const isMobile = window.innerWidth <= 768; // Or whatever threshold you desire
+      setLocalMapScale(isMobile ? mapScale * 2.9 : mapScale); // Increase scale by 20% if mobile
+    };
+
+    // Initialize scale
+    updateMapScale();
+
+    // Add event listener to update scale when window resizes
+    window.addEventListener("resize", updateMapScale);
+
+    // Cleanup event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", updateMapScale);
+    };
+  }, [mapScale]);
+
   const colorScale = scaleQuantize()
     .domain([0, 100])
     .range([
@@ -28,8 +48,8 @@ const MapComponent = ({ data, colorField, handleCountyClick, mapScale }) => {
     ]);
 
   return (
-    <div className={styles.mapContainer}>
-      <ComposableMap projection="geoAlbersUsa" projectionConfig={{ scale: mapScale }} style={{ height: "90vh" }}>
+    <div >
+      <ComposableMap className={styles.mapContainer} projection="geoAlbersUsa" projectionConfig={{ scale: localMapScale }}>
         {stateGeographyData.map(({ stateCode, url }) => (
           <Geographies key={stateCode} geography={url}>
             {({ geographies }) =>

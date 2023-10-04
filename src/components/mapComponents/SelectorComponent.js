@@ -1,19 +1,23 @@
 import React from 'react';
-import { Button, FormControl, InputLabel, MenuItem, Select, Box } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, Select, Box, Typography } from '@mui/material';
 import styles from './selectorModal.module.css';
 import Legend from './legend';
 
-const SelectorButtonModal = ({ maps, selectedMap, handleMapSelect, handleColorFieldChange, selectedButton, selectedCounty, colorField }) => {
+const SelectorButtonModal = ({ maps, selectedMap, handleMapSelect, handleColorFieldChange, selectedButton, selectedCounty, colorField, crop }) => {
   return (
     <Box className={styles.buttonBox}>
-      <div className={styles.mapInfoContainer}>
+        {/* Crop Name */}
+        <Typography className={styles.cropName}>
+          {crop}
+        </Typography>
+
         <div className={styles.mapInfoButtons}>
           <Button
             variant="contained"
             className={`${styles.mapInfoButton} ${selectedButton === "harvestPercent" ? styles.selected : ""}`}
             onClick={() => handleColorFieldChange("harvestPercent")}
           >
-            Harvest
+            Harvested
           </Button>
           <Button
             variant="contained"
@@ -27,7 +31,7 @@ const SelectorButtonModal = ({ maps, selectedMap, handleMapSelect, handleColorFi
             className={`${styles.mapInfoButton} ${selectedButton === "emergencePercent" ? styles.selected : ""}`}
             onClick={() => handleColorFieldChange("emergencePercent")}
           >
-            Emergence
+            Emerged
           </Button>
         </div>
         <FormControl fullWidth className={styles.mapSelect}>
@@ -52,10 +56,9 @@ const SelectorButtonModal = ({ maps, selectedMap, handleMapSelect, handleColorFi
           </Box>
         ) : (
           <Box className={styles.mapInfoBoxSelected}>
-            {`Hover over map to view %`}
+            {`Hover over a map to view %`}
           </Box>
         )}
-      </div>
     </Box>
   );
 }

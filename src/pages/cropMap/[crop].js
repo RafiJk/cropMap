@@ -18,13 +18,15 @@ import { MapComponent } from "../../components/mapComponents/mapComponent";
 const Container = styled("div")({
   display: "flex",
   flexDirection: "row",
-  alignItems: "center",
-  justifyContent: "center",
-  height: "100%",
-  "@media (max-width: 768px)": {  // Media query for screens up to 768px wide
-    flexDirection: "column",     // Change flex direction to column
-  }
+  backgroundColor: "white", 
+  "@media (max-width: 768px)": {
+    flexDirection: "column",
+    height: "auto",
+    padding: "0 10px",  // Reduced padding for smaller screens
+    margin: "0px",
+  },
 });
+
 
 
 const MapChart = () => {
@@ -109,12 +111,6 @@ const MapChart = () => {
     <>
       <Header />
       <Container>
-        <MapComponent
-          data={data}
-          colorField={colorField}
-          handleCountyClick={handleCountyClick}
-          mapScale={mapScale}
-        />
         <SelectorButtonModal
           maps={maps}
           selectedMap={selectedMap}
@@ -123,8 +119,14 @@ const MapChart = () => {
           selectedButton={selectedButton}
           selectedCounty={selectedCounty}
           colorField={colorField}
+          crop={crop}
         />
-        
+        <MapComponent
+          data={data}
+          colorField={colorField}
+          handleCountyClick={handleCountyClick}
+          mapScale={mapScale}
+        />
       </Container>
     </>
   );

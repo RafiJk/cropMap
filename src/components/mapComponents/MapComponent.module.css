@@ -1,8 +1,29 @@
 .mapChartContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 10px; 
-    margin-top: -50px;
-    box-sizing: border-box; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 100px; 
+  margin-top: 50px;
+  box-sizing: border-box; 
+}
+
+@media (max-width: 768px) {
+  .mapChartContainer {
+      padding: 0;
+      margin-top: 0;
   }
+}
+
+
+.mapContainer {
+  height: 90vh;
+  margin-top: 70px;
+}
+
+@media (max-width: 768px) {
+  .mapContainer {
+      margin-top: 40px;
+      padding:0;
+      height: auto;
+  }
+}
