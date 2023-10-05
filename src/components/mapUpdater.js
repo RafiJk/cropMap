@@ -91,7 +91,7 @@ const Updater = () => {
     handleUpdateClick(false)
     setCropType(value.slug);
   };
-
+  
   const [editableCounties, setEditableCounties] = useState([]);
 
   const getOrSetDoc = async () => {
@@ -99,14 +99,18 @@ const Updater = () => {
     if (cropType != null) {
       sC = cropType.charAt(0).toUpperCase() + cropType.slice(1);
     }
+    
     const collectionName = `${sC}Map`;
+ 
     const cropMapCollection = collection(db, collectionName);
     const cmq = query(cropMapCollection, orderBy("date", "desc"), limit(1)); //get most recent doc
+    
     try {
       const querySnapshot = await getDocs(cmq);
       const snapshot = querySnapshot.docs[0];
       console.log("Snapshot:  ", snapshot.data());
       let currentDate = Math.floor(Date.now()) / 1000; //where we are currently
+      
       let snapshotDate = await snapshot.data().date.seconds; //get DateFrom most recent doc
       const diffInDays = currentDate - snapshotDate; //do we need to make a newfile
       if (diffInDays >= 604800) {
