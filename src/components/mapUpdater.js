@@ -85,18 +85,19 @@ const Updater = () => {
   const router = useRouter();
   const [countyData, setCountyData] = useState({});
   const [isUpdating, setIsUpdating] = useState(false);
+  const [isLoading, setLoading] = useState(false);
 
   const handleCropChange = (event, value) => {
+    handleUpdateClick(false)
     setCropType(value.slug);
   };
 
   const [editableCounties, setEditableCounties] = useState([]);
 
-
   const getOrSetDoc = async () => {
     let sC = null;
     if (cropType != null) {
-      let sC = cropType.charAt(0).toUpperCase() + cropType.slice(1);
+      sC = cropType.charAt(0).toUpperCase() + cropType.slice(1);
     }
     const collectionName = `${sC}Map`;
     const cropMapCollection = collection(db, collectionName);
@@ -104,12 +105,13 @@ const Updater = () => {
     try {
       const querySnapshot = await getDocs(cmq);
       const snapshot = querySnapshot.docs[0];
+      console.log("Snapshot:  ", snapshot.data());
       let currentDate = Math.floor(Date.now()) / 1000; //where we are currently
       let snapshotDate = await snapshot.data().date.seconds; //get DateFrom most recent doc
       const diffInDays = currentDate - snapshotDate; //do we need to make a newfile
       if (diffInDays >= 604800) {
-        //rn this is testing if it's less then 7 day
-        console.log("here goof");
+        //rn this is testing if it's less then 7 days
+        console.log("here good");
         makeNewDoc();
       } else {
         console.log("here bad");
@@ -149,6 +151,7 @@ const Updater = () => {
 
   useEffect(() => {
     // Fetch data for all editable counties when the component mounts
+    console.log("Changing editable counties");
     if (editableCounties.length) {
       editableCounties.forEach((county) => {
         fetchCountyData(county);
@@ -158,6 +161,8 @@ const Updater = () => {
 
   useEffect(() => {
     if (cropType != null) {
+      setLoading(true);
+      setEditableCounties([]);
       console.log("Changed crops, updating data");
       getOrSetDoc();
 
@@ -172,6 +177,7 @@ const Updater = () => {
               const userData = userDocSnapshot.data();
               const userCounties = contextSelectedCounties || [];
               setEditableCounties(userCounties);
+              setLoading(false);
               console.log("Editable counties edited");
             }
           } catch (error) {
@@ -215,14 +221,16 @@ const Updater = () => {
     }
   };
 
-  const handleUpdateClick = async () => {
+  const handleUpdateClick = async (leavePage) => {
     // Loop through the keys of countyData (the counties the user has updated)
     for (const county of Object.keys(countyData)) {
       setIsUpdating(true);
       await updateHarvest(county); // Just send the county name
       setIsUpdating(false);
     }
-    router.push(`${location.origin}`);
+    if (leavePage) {
+      router.push(`${location.origin}`);
+    }
   };
 
   const handleInputChange = (event, county, type) => {
@@ -246,9 +254,9 @@ const Updater = () => {
 
   const fetchCountyData = async (county) => {
     // Check if data for this county is already in state
-    if (countyData[county]) {
-      return; // Data is already there, so return early
-    }
+    // if (countyData[county]) {
+    //   return; // Data is already there, so return early
+    // }
 
     let sC = cropType.charAt(0).toUpperCase() + cropType.slice(1);
     const collectionName = `${sC}Map`;
@@ -296,7 +304,7 @@ const Updater = () => {
       <StyledPaper elevation={3}>
         {verified ? (
           <>
-            {cropType && (
+            {cropType && !isLoading && (
               <>
                 <Grid container spacing={3}>
                   {["Counties", "Planted", "Emerged", "Harvested"].map(
@@ -380,14 +388,17 @@ const Updater = () => {
                     </Grid>
                   ))}
                 </StyledDiv>
+                <CountyTypography align="center" style={{margin:"0px", color: "black"}}>
+                  NOTE: Only the crop which is currently selected will be updated
+                </CountyTypography>
                 {/* Update Button */}
                 <StyledButton
-                  onClick={() => handleUpdateClick()}
+                  onClick={() => handleUpdateClick(true)}
                   disabled={!cropType || isUpdating}
                   variant="contained"
                 >
                   {isUpdating
-                    ? "Updating...Redirecting Home"
+                    ? "Updating..."
                     : "Update Harvest Percents"}
                 </StyledButton>
               </>

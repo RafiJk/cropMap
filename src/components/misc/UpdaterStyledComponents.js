@@ -101,6 +101,6 @@ export const StyledButton = styled(Button)({
   backgroundColor: "lightgreen",
   color: "white",
   fontWeight: "bold", 
-  marginTop: "2rem", 
+  marginTop: "5px", 
   width: "100%", 
 });

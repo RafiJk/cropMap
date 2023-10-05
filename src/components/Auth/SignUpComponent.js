@@ -119,6 +119,10 @@ const SignUp = () => {
     }
   };
 
+  const handleFormSubmit = async (event) => {
+    event.preventDefault(); // Prevent default form submission behavior
+    await handleSignUp(); // Execute sign up logic
+  };
 
   return (
     <StyledContainer>
@@ -126,6 +130,7 @@ const SignUp = () => {
         <Typography variant="h4" gutterBottom>
           Sign Up
         </Typography>
+        <form onSubmit={handleFormSubmit}>
         <TextField
           variant="outlined"
           margin="normal"
@@ -186,6 +191,7 @@ const SignUp = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <Button
+          type="submit"
           variant="contained"
           color="primary"
           fullWidth
@@ -194,6 +200,7 @@ const SignUp = () => {
         >
           Sign Up
         </Button>
+        </form>
           <Dialog
             open={openDialog}
             onClose={() => setOpenDialog(false)}
