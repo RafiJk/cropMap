@@ -388,9 +388,6 @@ const Updater = () => {
                     </Grid>
                   ))}
                 </StyledDiv>
-                <CountyTypography align="center" style={{margin:"0px", color: "black"}}>
-                  NOTE: Only the crop which is currently selected will be updated
-                </CountyTypography>
                 {/* Update Button */}
                 <StyledButton
                   onClick={() => handleUpdateClick(true)}
