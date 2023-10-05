@@ -44,7 +44,10 @@ const StyledTextField = styled(TextField)({
   "@media (max-width: 600px)": {
     fontSize: "0.8rem", // Reduce font size for mobile.
   },
-  width:"500px"
+  width:"500px",
+  "@media (max-width: 600px)": {
+    width:"300px",
+  },
 });
 
 const GoButton = styled(Button)({
@@ -88,6 +91,7 @@ const WhiteTypography = styled(Typography)(({ theme }) => ({
     textShadow: "6px 6px 10px rgba(0, 0, 0, 0.5)",
   },
   fontWeight: 900,
+  marginTop: "50px"
 }));
 
 const Home = () => {
@@ -116,10 +120,10 @@ const Home = () => {
             style={{ width: "100%", height: "100%", objectFit: "cover" }}
           />
         </ImageBox>
-        <WhiteTypography variant="h2" gutterBottom align="left">
+        <WhiteTypography variant="h2"  align="left">
           The
         </WhiteTypography>
-        <WhiteTypography variant="h1" gutterBottom align="left">
+        <WhiteTypography variant="h1"  align="left" style={{marginBottom: "30px", marginTop: "30px"}}>
           Crop Map
         </WhiteTypography>
         <ContentBox display="flex" flexDirection="column" alignItems="center" >
