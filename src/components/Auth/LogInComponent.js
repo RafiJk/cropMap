@@ -77,7 +77,7 @@ const LogIn = () => {
         }
           console.log('You are signed up and verified!');
           router.push({
-              pathname: '../selectedMapDatePlebian',
+              pathname: '../addMapDates/updater',
           });
       }
      }

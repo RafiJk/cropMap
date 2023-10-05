@@ -25,8 +25,8 @@ const theme = createTheme({
 });
 
 const StyledAppBar = styled(AppBar)({
-  background: "#2B3F2D96",
-  boxShadow: "none",
+  background: "#2B3F2D",
+  boxShadow:"0px 8px 16px rgba(0, 0, 0, 0.3)",
   borderBottom: "1px solid rgba(0, 0, 0, 0.12)",
   position: 'fixed',
   top: 0,

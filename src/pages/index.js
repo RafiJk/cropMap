@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import { Box, Container, Typography, styled, Button } from "@mui/material";
 import { useRouter } from "next/router";
 import Header from "../components/misc/Header";
+import { SelectCropBox } from "../components/misc/UpdaterStyledComponents";
 
 const options = [
   { label: "Corn", image: "./singlecorn.jpeg", slug: "Corn" },
@@ -37,14 +38,13 @@ const ImageBox = styled(Box)({
   overflow: "hidden",
 });
 
-
 const StyledTextField = styled(TextField)({
   backgroundColor: "#FAFAFA",
   borderRadius: "15px",
-  width: "100%",
   "@media (max-width: 600px)": {
     fontSize: "0.8rem", // Reduce font size for mobile.
   },
+  width:"500px"
 });
 
 const GoButton = styled(Button)({
@@ -97,7 +97,6 @@ const Home = () => {
 
   const handleOptionChange = (event, value) => {
     setSelectedCrop(value);
-    setIsDropdownOpen(false); // Close the dropdown
   };
 
   const goToCropMap = () => {
@@ -123,53 +122,19 @@ const Home = () => {
         <WhiteTypography variant="h1" gutterBottom align="left">
           Crop Map
         </WhiteTypography>
-        <ContentBox display="flex" flexDirection="column" alignItems="center">
+        <ContentBox display="flex" flexDirection="column" alignItems="center" >
           <Autocomplete
             id="combo-box-demo"
             options={options}
-            open={isDropdownOpen}
-            onOpen={() => setIsDropdownOpen(true)}
             getOptionLabel={(option) => option.label}
-            blurOnSelect
-            onInputChange={(event, value, reason) => {
-              if (reason === "reset") {
-                setSelectedCrop(null);
-              }
-            }}
-            renderOption={(props, option) => (
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  cursor: "pointer",
-                }}
-                {...props}
-                onClick={() => {
-                  setSelectedCrop(option);
-                  setIsDropdownOpen(false);
-                }}
-              >
-                <img
-                  src={option.image}
-                  alt={option.label}
-                  style={{ marginRight: 8, width: 40, height: 40 }}
-                />
-                {option.label}
-              </Box>
-            )}
-            style={{ width: "100%" }} // Make the Autocomplete take full width of its container.
             renderInput={(params) => (
               <StyledTextField
                 {...params}
-                label={
-                  selectedCrop
-                    ? selectedCrop.label
-                    : "Search a Map: wheat, corn, or soy"
-                }
+                label="Search a Map: Wheat, Corn, or Soybean"
                 variant="outlined"
               />
             )}
-            onChange={(event, newValue) => handleOptionChange(event, newValue)} // Properly set up the onChange handler.
+            onChange={handleOptionChange} // Properly set up the onChange handler.
           />
           <GoButton variant="text" onClick={goToCropMap}>
             Go

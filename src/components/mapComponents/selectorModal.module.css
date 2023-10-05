@@ -2,7 +2,7 @@
   display: flex;
   flex-direction: column;
   padding: 20px;
-  background-color: rgba(104, 214, 104, 0.9);
+  background-color: rgba(52, 168, 44, 0.606);
   height: 100vh;
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
   color: white;
@@ -10,11 +10,10 @@
 }
 @media (max-width: 768px) {
   .buttonBox {
-    padding: 10px;  /* Reduced padding for mobile */
-    height: auto;   /* Adjust height to content */
+    padding: 10px; /* Reduced padding for mobile */
+    height: auto; /* Adjust height to content */
   }
 }
-
 
 .mapInfoButton {
   width: 100%;
@@ -24,25 +23,22 @@
 }
 
 .selected {
-  background-color: #228B22 !important;
+  background-color: #439f43 !important;
 }
 
 .mapSelect {
   margin-top: 20px;
   color: white;
-
-
 }
 
 .mapInfoBoxSelected {
   margin-top: 20px;
   padding: 10px;
-  background-color: #2a912a;
+  background-color: #519751;
   border-radius: 5px;
   color: white;
   font-size: 30px;
   font-weight: bold;
-
 }
 
 .cropName {
