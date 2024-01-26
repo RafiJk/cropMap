@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, FormControl, InputLabel, MenuItem, Select, Box, Typography } from '@mui/material';
+import { Button, FormControl, InputLabel, MenuItem, Select, Box, Typography, styled } from '@mui/material';
 import styles from './selectorModal.module.css';
 import Legend from './legend';
+
 
 const SelectorButtonModal = ({ maps, selectedMap, handleMapSelect, handleColorFieldChange, selectedButton, selectedCounty, colorField, crop }) => {
   return (
@@ -59,6 +60,13 @@ const SelectorButtonModal = ({ maps, selectedMap, handleMapSelect, handleColorFi
             {`Hover over a map to view %`}
           </Box>
         )}
+        <Box style={{ width: '100%', height: 'auto' }}>
+          <img
+            src={"./../logo.jpeg"}
+            alt="Crop Image"
+            style={{ width: "100%", height: "auto", objectFit: "cover", paddingTop: "20px" }}
+          />
+        </Box>
     </Box>
   );
 }
