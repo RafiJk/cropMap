@@ -90,9 +90,17 @@ const LogIn = () => {
             });
           }
           console.log("You are signed up and verified!");
-          router.push({
-            pathname: "../addMapDates/updater",
-          });
+          // if(isAdmin == true){
+          //   router.push({
+          //     pathname: "../addMapDates/adminUpdater",
+          //   });
+          // }
+          if(isAdmin != true || isAdmin == true){
+            router.push({
+              pathname: "../addMapDates/updater",
+            });
+          }
+          
         }
       }
     } catch (error) {

@@ -87,9 +87,10 @@ const Updater = () => {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isLoading, setLoading] = useState(false);
 
-  const handleCropChange = (event, value) => {
-    handleUpdateClick(false)
+  const handleCropChange = async (event, value) => {
+    handleUpdateClick(false);
     setCropType(value.slug);
+    // Optionally, you can include additional logic or data fetching here
   };
   
   const [editableCounties, setEditableCounties] = useState([]);
@@ -174,10 +175,14 @@ const Updater = () => {
       const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
         setAdmin(authUser);
         if (authUser) {
+          console.log(
+            "i guess not admin" 
+           );
           try {
             const userDocRef = doc(db, "myUsers", authUser.uid);
             const userDocSnapshot = await getDoc(userDocRef);
             if (userDocSnapshot.exists()) {
+            
               const userData = userDocSnapshot.data();
               const userCounties = contextSelectedCounties || [];
               setEditableCounties(userCounties);
@@ -188,6 +193,26 @@ const Updater = () => {
             console.error("Error fetching user data:", error);
           }
         }
+        //ISSUE MIGHT HAVE HAD SOMETING TO DO WITH AUTH USER AND NOT LOADING PROPER...
+        // } else if(authUser && admin == true){ //TO UPDATE IF YOU ARE AN ADMIN CHANGE THE CROP MAP HERE
+        //   console.log(
+        //     "i guess admin" 
+        //    );
+        //   try {
+        //     const userDocRef = doc(db, "myUsers", authUser.uid);
+        //     const userDocSnapshot = await getDoc(userDocRef);
+        //     if (userDocSnapshot.exists()) {
+        //       const userData = userDocSnapshot.data();
+        //       const userCounties = contextSelectedCounties || [];
+        //       // const allCountiesList = [].concat(...Object.values(countiesByState));
+        //       setEditableCounties(countiesListDE);
+        //       setLoading(false);
+        //       console.log("Editable counties edited");
+        //     }
+        //   } catch (error) {
+        //     console.error("Error fetching user data:", error);
+        //   }
+        // }
       });
       return () => {
         unsubscribe();
@@ -223,15 +248,18 @@ const Updater = () => {
     } catch (error) {
       console.error("Error updating harvest percent:", error);
     }
+    
   };
 
   const handleUpdateClick = async (leavePage) => {
     // Loop through the keys of countyData (the counties the user has updated)
+
     for (const county of Object.keys(countyData)) {
       setIsUpdating(true);
       await updateHarvest(county); // Just send the county name
       setIsUpdating(false);
     }
+    console.log("how bout here");
     if (leavePage) {
       router.push(`${location.origin}`);
     }

@@ -59,15 +59,21 @@ const SignUp = () => {
   const [selectedState, setSelectedState] = useState("");
   const [selectedCounties, setSelectedCounties] = useState([]);
   const [openDialog, setOpenDialog] = useState(false);
+  const [signUpsDisabled, setSignUpsDisabled] = useState(true); // Add this state to close sign up
 
 
-  const allowedDomains = ["@terpmail.umd.edu", "@umd.edu"];
+  const allowedDomains = ["@terpmail.umd.edu", "@umd.edu"]; //can't create gmail...or @umd.edu...
 
   const isAllowedDomain = (email) => {
       return allowedDomains.some(domain => email.endsWith(domain));
   };
 
   const handleSignUp = async () => {
+    if (signUpsDisabled) {
+      setOpenDialog(true);
+      return; // Stop further processing
+    }
+
     try {
       // Check if the email domain is allowed
       if (!isAllowedDomain(email)) {
@@ -222,6 +228,24 @@ const SignUp = () => {
             </Button>
           </DialogActions>
         </Dialog>  
+        <Dialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          aria-labelledby="alert-dialog-title"
+          aria-describedby="alert-dialog-description"
+        >
+          <DialogTitle id="alert-dialog-title">{"Sign-up Disabled"}</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="alert-dialog-description">
+              Sign-ups are disabled until after the demonstration.
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => setOpenDialog(false)} color="primary">
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
       </StyledPaper>
     </StyledContainer>
   );
