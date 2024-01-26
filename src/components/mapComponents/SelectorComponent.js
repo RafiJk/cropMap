@@ -8,7 +8,7 @@ const SelectorButtonModal = ({ maps, selectedMap, handleMapSelect, handleColorFi
   return (
     <Box className={styles.buttonBox}>
         {/* Crop Name */}
-        <Typography className={styles.cropName}>
+        <Typography className={styles.cropName} style={{ fontSize: '40px', fontWeight: 'bold' }}>
           {crop}
         </Typography>
 
