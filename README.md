@@ -1,3 +1,62 @@
+# Crop Map
+
+Welcome to **Crop Map**, a cutting-edge web application designed to provide valuable insights into the agricultural landscape. The platform empowers farmers, researchers, and agricultural enthusiasts with accurate and up-to-date information about crop progress across various regions.
+
+## Overview
+
+**Crop Map** is an interactive map that visualizes the progress of wheat, soy, and corn crops as they go through different stages, such as planting, emergence, and harvesting. The map displays real-time data using color-coded shading, which reflects the percentage of crops that have reached each growth stage in specific counties. This data is regularly updated by Agriculture Extension Educators and Specialists to ensure that the information provided is both accurate and timely.
+
+The goal of **Crop Map** is to support the agricultural community by helping users make data-driven decisions, optimize farming practices, and predict trends to ensure sustainable and efficient crop management.
+
+## Features
+
+- **Interactive Map**: Navigate through counties to view crop progress across different regions.
+- **Real-time Data**: The platform is continuously updated with the latest data, ensuring that users have access to the most current information available.
+- **Color-Coded Progress Indicators**: The map uses various shades of green to represent the percentage of crops at different stages of growth (planting, emergence, harvesting).
+- **Crop Types**: Track progress for three key crops: wheat, soy, and corn.
+- **Timely Updates**: Data provided by Agriculture Extension Educators and Specialists to reflect accurate and region-specific crop statuses.
+
+## Technology Stack
+
+- **React**: The web application is built using React, a powerful JavaScript library for building user interfaces.
+- **Vercel**: The platform is hosted on Vercel, ensuring fast and reliable performance for users across the globe.
+
+## Getting Started
+
+To get started with **Crop Map**, simply visit the live application hosted on [Vercel](https://your-app-url.vercel.app).
+
+### Prerequisites
+
+- A modern web browser (Chrome, Firefox, Safari, Edge, etc.)
+- Internet connection to view the real-time map updates
+
+### How to Use
+
+1. **Navigate the Map**: Zoom in and out to explore different counties and see crop progress in various areas.
+2. **View Crop Data**: Each county will display crop progress with color-coded indicators, showing the percentage of crops at each growth stage.
+3. **Filter Crop Types**: Toggle between wheat, soy, and corn to focus on specific crops.
+
+## Contributing
+
+We welcome contributions to **Crop Map**. If you'd like to help improve the application, please fork the repository and submit a pull request. You can report any issues, suggest new features, or improve the codebase.
+
+## Credits
+
+- **Developers**: Raphael Kigner and Sam Low
+- **Data Providers**: Agriculture Extension Educators and Specialists
+
+For any inquiries or feedback, feel free to reach out via the Issues tab or contact us directly.
+
+---
+
+Thank you for using **Crop Map**, and we hope it helps you make informed decisions in the agricultural field!
+
+
+
+
+
+
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
